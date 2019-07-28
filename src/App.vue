@@ -5,8 +5,16 @@
 </template>
 
 <script>
+import * as Debug from 'debug'
+const debug = Debug('App')
+
 export default {
-  name: 'App'
+  name: 'App',
+
+  created: function () {
+    debug('created')
+    this.$store.commit('app/setTheme', 'slate')
+  }
 }
 </script>
 

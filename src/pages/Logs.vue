@@ -1,8 +1,9 @@
 <template>
   <!-- <q-page class="flex flex-center"> -->
-  <q-page>
+  <q-page :style="{height: height}">
+    <!-- :style-fn="myStyle" -->
     <!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
-    <grid-view :id="id" :components="components" :grid="grid" />
+    <grid-view :id="id" :components="components" :grid="grid"/>
   </q-page>
 </template>
 
@@ -18,6 +19,9 @@ import admin_lte_mixin from '@components/mixins/adminlte'
 import GridView from '@components/gridView'
 
 // import Test from '@components/test/test.vue'
+
+import { dom } from 'quasar'
+const { height, width } = dom
 
 export default {
   mixins: [admin_lte_mixin],
@@ -52,6 +56,7 @@ export default {
 
   data () {
     return {
+      height: '0px',
       id: 'logs',
       grid: {
         layouts: {
@@ -65,7 +70,8 @@ export default {
             // second row
             { x: 1, y: 1, w: 10, h: 2, i: '6' },
             { x: 0, y: 2, w: 12, h: 16, i: '7' },
-            { x: 0, y: 3, w: 12, h: 20, i: '8' }
+            { x: 0, y: 3, w: 12, h: 30, i: '8' }
+            // { x: 0, y: 4, w: 12, h: 2, i: '9' }
           ],
           'md': [
             { x: 0, y: 0, w: 2, h: 7, i: '0' },
@@ -78,6 +84,7 @@ export default {
             { x: 1, y: 1, w: 6, h: 2, i: '6' },
             { x: 0, y: 2, w: 8, h: 16, i: '7' },
             { x: 0, y: 3, w: 8, h: 20, i: '8' }
+            // { x: 0, y: 4, w: 8, h: 2, i: '9' }
 
           ],
           'sm': [
@@ -91,7 +98,7 @@ export default {
             { x: 1, y: 2, w: 4, h: 2, i: '6' },
             { x: 0, y: 3, w: 6, h: 16, i: '7' },
             { x: 0, y: 4, w: 6, h: 20, i: '8' }
-
+            // { x: 0, y: 5, w: 6, h: 2, i: '9' }
           ]
 
         },
@@ -104,9 +111,9 @@ export default {
         // breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
         colsAll: { lg: 12, md: 8, sm: 6, xs: 4, xxs: 2 },
         // rowHeight: 400,
-        isDraggable: false,
-        isResizable: false,
-        preview: true
+        isDraggable: true,
+        isResizable: true,
+        preview: false
       },
       components: {
         '0': [{
@@ -162,41 +169,13 @@ export default {
 
         '8': [{
           component: 'MyTable'
-          // options: {
-          //   title: 'Logs',
-          //   data: [
-          //     {
-          //       name: 'Frozen Yogurt',
-          //       calories: 159,
-          //       fat: 6.0,
-          //       carbs: 24,
-          //       protein: 4.0,
-          //       sodium: 87,
-          //       calcium: '14%',
-          //       iron: '1%'
-          //     }
-          //   ],
-          //   columns: [
-          //     {
-          //       name: 'name',
-          //       required: true,
-          //       label: 'Dessert (100g serving)',
-          //       align: 'left'
-          //       // field: row => row.name,
-          //       // format: val => `${val}`,
-          //       // sortable: true
-          //     },
-          //     { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-          //     { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-          //     { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-          //     { name: 'protein', label: 'Protein (g)', field: 'protein' },
-          //     { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-          //     { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-          //     { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-          //   ],
-          //   'row-key': 'name'
-          // }
-        }],
+        }]
+        // '9': [{
+        //   component: 'MyRange'
+        // }]
+        // '9': [{
+        //   component: 'q-btn'
+        // }],
         // '1': [{
         //   id: 1,
         //   component: 'admin-lte-events'
@@ -228,36 +207,36 @@ export default {
         //     defaultSize: 2
         //   }
         // ],
-        '4': [],
-        '5': [
-          {
-            component: 'q-btn',
-            // defaultSize: 2,
-            options: {
-              // round: true,
-              label: 'edit/preview',
-              style: 'position: relative'
-              // '@click': "$emit('disableGrid')"
-            },
-            events: {
-              click: 'disableGrid'
-            }
-            // componentProps: "round color: 'primary'"
-          },
-          {
-            component: 'q-btn',
-            // defaultSize: 2,
-            options: {
-            // round: true,
-              label: 'draggables',
-              style: 'position: relative'
-            // '@click': "$emit('disableGrid')"
-            },
-            events: {
-              click: 'disableEdit'
-            }
-          // componentProps: "round color: 'primary'"
-          }]
+        // '4': [],
+        // '9': [
+        //   {
+        //     component: 'q-btn',
+        //     // defaultSize: 2,
+        //     options: {
+        //       // round: true,
+        //       label: 'edit/preview'
+        //       // style: 'position: relative'
+        //       // '@click': "$emit('disableGrid')"
+        //     },
+        //     events: {
+        //       click: 'disableGrid'
+        //     }
+        //     // componentProps: "round color: 'primary'"
+        //   },
+        //   {
+        //     component: 'q-btn',
+        //     // defaultSize: 2,
+        //     options: {
+        //     // round: true,
+        //       label: 'draggables'
+        //       // style: 'position: relative'
+        //     // '@click': "$emit('disableGrid')"
+        //     },
+        //     events: {
+        //       click: 'disableEdit'
+        //     }
+        //   // componentProps: "round color: 'primary'"
+        //   }]
         // '5': [{
         //   // component: 'admin-lte-box'
         //   component: 'TestTest'
@@ -270,6 +249,28 @@ export default {
         // }]
       }
     }
+  },
+  methods: {
+    // myStyle: function (offset) {
+    //   // const size = `calc(100vh - ${offset}px)`
+    //   const size = height(document.getElementById('logs')) + 500
+    //   return {
+    //     minHeight: size,
+    //     height: size
+    //   }
+    // }
+    getGridHeight: function () {
+      debug('getGridHeight', height(document.getElementById('logs')))
+      return height(document.getElementById('logs')) + 700
+    }
+  },
+  mounted: function () {
+    // console.log('height:', height(document.getElementById('logs')))
+    this.height = this.getGridHeight() + 'px'
   }
+  // updated: function () {
+  //   // console.log('height:', height(document.getElementById('logs')))
+  //   this.height = this.getGridHeight() + 'px'
+  // }
 }
 </script>

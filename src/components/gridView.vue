@@ -1,6 +1,6 @@
 <template>
-<!-- <div class="content-wrapper">
-<section class="content"> -->
+<!-- <div class="bg-primary"> -->
+<!-- <section class="content"> -->
     <VueResponsiveGridLayout
         @layout-update="onLayoutUpdate"
         @layout-change="onLayoutChange"
@@ -11,10 +11,12 @@
         :compactType="'vertical'"
         :breakpoint="viewGrid.breakpoint"
         :cols="viewGrid.cols"
-        ref="layout"
+        :ref="id"
+        :id="id"
         :useCSSTransforms="true"
         :breakpoints="viewGrid.breakpoints"
         :colsAll="viewGrid.colsAll"
+        class="absolute-full"
     >
       <template slot-scope="props">
 
@@ -33,7 +35,7 @@
           :cols="props.cols"
           :heightFromChildren="false"
           :maxRows="props.maxRows"
-          :class="'col-'+viewGrid.breakpoint+'-'+viewGrid.colsAll[viewGrid.breakpoint]"
+          :class="'bg-primary col-'+viewGrid.breakpoint+'-'+viewGrid.colsAll[viewGrid.breakpoint]"
         >
           <!-- <div v-if="viewGrid.components[item.i]" class="connectedSortable"> -->
           <!-- <section :class="'col-'+viewGrid.breakpoint+' connectedSortable'" :id="item.i" v-if="viewGrid.components[item.i]"> -->
@@ -111,8 +113,8 @@
 
     </VueResponsiveGridLayout>
 
-  <!-- </section>
-</div> -->
+  <!-- </section> -->
+<!-- </div> -->
 </template>
 <script>
 // import { mapGetters, mapActions } from 'vuex'
@@ -129,6 +131,9 @@ const debug = Debug('components:gridView')
 import draggable from 'vuedraggable'
 import { VueResponsiveGridLayout, VueGridItem } from 'vue-responsive-grid-layout'
 import { mapState, mapGetters } from 'vuex'
+
+import { dom } from 'quasar'
+const { height, width } = dom
 
 export default {
   name: 'GridView',
@@ -183,6 +188,10 @@ export default {
   //     components: {}
   //   }
   // },
+  updated: function () {
+    // console.log('height:', height(document.getElementById('logs')))
+    debug('mounted', height(this.$refs.logs.$el))
+  },
   created: function () {
     debug('created', this.id)
     let id = this.id
@@ -495,7 +504,9 @@ export default {
       debug('onBreakpointChange', breakpoint)
       // this.breakpoint = breakpoint
       let grid = this.viewGrid
-      grid.breakpoint = breakpoint
+      grid.breakpoint = breakpoint/* .vue-grid-placeholder {
+  background: #ddd; border: 2px dashed #aaa;
+} */
       this.viewGrid = grid
     },
 
@@ -576,9 +587,9 @@ body {
 .grid-item {
   border: 1px dotted #000;
 }
-.vue-grid-placeholder {
+/* .vue-grid-placeholder {
   background: #ddd; border: 2px dashed #aaa;
-}
+} */
 
 .vue-grid-layout {
   width: 100%;

@@ -1,5 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+     <!-- :style="{height: height}" -->
   <!--   <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -84,7 +85,7 @@
       </q-list>
     </q-drawer> -->
 
-    <q-page-container>
+    <q-page-container class="bg-primary" :style="{height: '100%'}">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -92,16 +93,30 @@
 
 <script>
 // import { openURL } from 'quasar'
+import * as Debug from 'debug'
+const debug = Debug('layouts:App')
+
+import { dom } from 'quasar'
+const { height, width } = dom
 
 export default {
   name: 'MyLayout',
   data () {
     return {
+      height: '0px'
       // leftDrawerOpen: this.$q.platform.is.desktop
     }
   },
   methods: {
     // openURL
+    getGridHeight: function () {
+      debug('getGridHeight', height(document.getElementById('logs')))
+      return height(document.getElementById('logs')) + 500
+    }
+  },
+  mounted: function () {
+    // console.log('height:', height(document.getElementById('logs')))
+    this.height = this.getGridHeight() + 'px'
   }
 }
 </script>

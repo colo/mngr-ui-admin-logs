@@ -7,6 +7,8 @@
     hide-bottom
     :visible-columns="visibleColumns"
     :pagination.sync="pagination"
+    class="bg-primary"
+    :dark="$store.state.app.theme.current === 'slate'"
   >
     <template v-slot:top="props">
       <q-space />
@@ -22,6 +24,7 @@
         :options="columns"
         option-value="name"
         style="min-width: 150px"
+        :dark="$store.state.app.theme.current === 'slate'"
       />
     </template>
   </q-table>
