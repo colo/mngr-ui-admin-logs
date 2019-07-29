@@ -101,24 +101,24 @@ import { dom } from 'quasar'
 const { height, width } = dom
 
 export default {
-  name: 'MyLayout',
-  data () {
-    return {
-      height: '0px'
-      // leftDrawerOpen: this.$q.platform.is.desktop
-    }
-  },
-  methods: {
-    // openURL
-    getGridHeight: function () {
-      debug('getGridHeight', height(document.getElementById('logs')))
-      return height(document.getElementById('logs')) + 500
-    }
-  },
-  mounted: function () {
-    // console.log('height:', height(document.getElementById('logs')))
-    this.height = this.getGridHeight() + 'px'
-  }
+  name: 'MyLayout'
+  // data () {
+  //   return {
+  //     height: '0px'
+  //     // leftDrawerOpen: this.$q.platform.is.desktop
+  //   }
+  // },
+  // methods: {
+  //   // openURL
+  //   getGridHeight: function () {
+  //     debug('getGridHeight', height(document.getElementById('logs')))
+  //     return height(document.getElementById('logs')) + 500
+  //   }
+  // },
+  // mounted: function () {
+  //   // console.log('height:', height(document.getElementById('logs')))
+  //   this.height = this.getGridHeight() + 'px'
+  // }
 }
 </script>
 

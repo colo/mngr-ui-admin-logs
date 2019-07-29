@@ -1,3 +1,14 @@
+<template>
+  <!-- <q-page class="flex flex-center"> -->
+  <q-page :style="{height: height}">
+    <!-- :style-fn="myStyle" -->
+    <!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
+    <grid-view :id="id" :components="components" :grid="grid"/>
+  </q-page>
+</template>
+
+<style>
+</style>
 
 <script>
 import * as Debug from 'debug'
@@ -18,7 +29,7 @@ const { height, width } = dom
 import { EventBus } from '@libs/eventbus'
 
 export default {
-  mixins: [admin_lte_mixin, GridView],
+  mixins: [admin_lte_mixin],
 
   name: 'Logs',
   components: { GridView },
@@ -60,7 +71,7 @@ export default {
       },
       range: [],
 
-      // height: '0px',
+      height: '0px',
       id: 'logs',
       grid: {
         layouts: {
@@ -167,7 +178,7 @@ export default {
         '6': [{
           component: 'MyRange',
           options: {
-            range: this.range,
+            // range: this.range
             ref: 'MyRange'
           }
         }],
@@ -356,15 +367,14 @@ export default {
 
       this.$set(this.range, 0, payload.logs.range[0])
       this.$set(this.range, 1, payload.logs.range[1])
-      // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
-      this.$refs['MyRange'].range = payload.logs.range
-      debug('__process_dashboard_logs', this.$refs['MyRange'])
+
+      // debug(this.$refs)
     }
+  },
+  mounted: function () {
+    // console.log('height:', height(document.getElementById('logs')))
+    this.height = this.getGridHeight() + 'px'
   }
-  // mounted: function () {
-  //   // console.log('height:', height(document.getElementById('logs')))
-  //   this.height = this.getGridHeight() + 'px'
-  // }
   // updated: function () {
   //   // console.log('height:', height(document.getElementById('logs')))
   //   this.height = this.getGridHeight() + 'px'

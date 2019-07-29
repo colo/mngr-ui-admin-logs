@@ -1,8 +1,6 @@
 <template>
 <!-- <div class="bg-primary"> -->
 <!-- <section class="content"> -->
-  <q-page :style="{height: height}">
-
     <VueResponsiveGridLayout
         @layout-update="onLayoutUpdate"
         @layout-change="onLayoutChange"
@@ -117,7 +115,6 @@
 
   <!-- </section> -->
 <!-- </div> -->
-  </q-page>
 </template>
 <script>
 // import { mapGetters, mapActions } from 'vuex'
@@ -144,26 +141,26 @@ export default {
   components: { VueResponsiveGridLayout, VueGridItem, draggable },
 
   props: {
-    // id: {
-    //   type: [String]
-    //   // default: ''
-    // }
+    id: {
+      type: [String]
+      // default: ''
+    },
     // componentsDir: {
     //   type: [String, Array],
     //   default: ''
     // },
-    // components: {
-    //   type: [Object],
-    //   default: function () {
-    //     return {}
-    //   }
-    // },
-    // grid: {
-    //   type: [Object],
-    //   default: function () {
-    //     return {}
-    //   }
-    // }
+    components: {
+      type: [Object],
+      default: function () {
+        return {}
+      }
+    },
+    grid: {
+      type: [Object],
+      default: function () {
+        return {}
+      }
+    }
     // EventBus: undefined
   },
 
@@ -186,18 +183,14 @@ export default {
     }
   },
 
-  data: function () {
-    return {
-      height: '0px'
-    }
-  },
+  // data: function () {
+  //   return {
+  //     components: {}
+  //   }
+  // },
   updated: function () {
     // console.log('height:', height(document.getElementById('logs')))
-    debug('updated', height(this.$refs.logs.$el))
-  },
-  mounted: function () {
-    // console.log('height:', height(document.getElementById('logs')))
-    this.height = this.getGridHeight() + 'px'
+    debug('mounted', height(this.$refs.logs.$el))
   },
   created: function () {
     debug('created', this.id)
@@ -318,12 +311,6 @@ export default {
     }
   },
   methods: {
-
-    getGridHeight: function () {
-      debug('getGridHeight', height(document.getElementById('logs')))
-      return height(document.getElementById('logs')) + 700
-    },
-
     resolveComponent: function (component) {
       debug('resolveComponent', component)
       //

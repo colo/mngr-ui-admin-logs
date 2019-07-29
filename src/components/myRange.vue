@@ -1,8 +1,8 @@
 <template>
   <q-range
     v-model="rangeSnap"
-    :min="1557135422000"
-    :max="1557136059000"
+    :min="rangeSnap.min"
+    :max="rangeSnap.max"
     :step="60000"
     drag-range
     label
@@ -13,14 +13,37 @@
 
 </template>
 <script>
+import * as Debug from 'debug'
+const debug = Debug('components:myRange')
+
 export default {
   name: 'MyRange',
 
+  // props: {
+  //   range: {
+  //     type: [Array],
+  //     default: function () {
+  //       return []
+  //     }
+  //   }
+  // },
+
+  watch: {
+    range: {
+      handler: function (val) {
+        debug('watch range', val)
+
+        this.rangeSnap = { min: val[0], max: val[1] }
+      },
+      deep: true
+    }
+  },
   data () {
     return {
+      range: [],
       rangeSnap: {
-        min: 1557135422000,
-        max: 1557136059000
+        min: 0,
+        max: 0
       }
     }
   }
