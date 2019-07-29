@@ -85,7 +85,8 @@
       </q-list>
     </q-drawer> -->
 
-    <q-page-container class="bg-primary" :style="{height: '100%'}">
+    <q-page-container class="bg-secondary">
+       <!-- :style="{height: '100%'}" -->
       <router-view />
     </q-page-container>
   </q-layout>

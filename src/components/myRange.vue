@@ -8,7 +8,7 @@
     label
     markers
     snap
-    color="primary"
+    color="positive"
   />
 
 </template>

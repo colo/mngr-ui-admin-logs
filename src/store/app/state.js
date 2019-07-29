@@ -3,7 +3,7 @@ export default function () {
     theme: {
       current: 'white',
       white: {// white
-        primary: '#f8f8f8',
+        // primary: '#f8f8f8',
         // secondary: '#cdcdcd',
         secondary: '#ffffff',
         accent: '#567a9a',

@@ -7,7 +7,7 @@
     hide-bottom
     :visible-columns="visibleColumns"
     :pagination.sync="pagination"
-    class="bg-primary"
+    class="bg-secondary"
     :dark="$store.state.app.theme.current === 'slate'"
   >
     <template v-slot:top="props">

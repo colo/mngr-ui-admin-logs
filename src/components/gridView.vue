@@ -35,7 +35,7 @@
           :cols="props.cols"
           :heightFromChildren="false"
           :maxRows="props.maxRows"
-          :class="'bg-primary col-'+viewGrid.breakpoint+'-'+viewGrid.colsAll[viewGrid.breakpoint]"
+          :class="'bg-secondary col-'+viewGrid.breakpoint+'-'+viewGrid.colsAll[viewGrid.breakpoint]"
         >
           <!-- <div v-if="viewGrid.components[item.i]" class="connectedSortable"> -->
           <!-- <section :class="'col-'+viewGrid.breakpoint+' connectedSortable'" :id="item.i" v-if="viewGrid.components[item.i]"> -->
