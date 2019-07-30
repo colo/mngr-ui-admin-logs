@@ -38,6 +38,9 @@ export default {
       deep: true
     }
   },
+  created: function () {
+    debug('created', this.range)
+  },
   data () {
     return {
       range: [],

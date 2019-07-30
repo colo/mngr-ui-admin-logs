@@ -58,7 +58,7 @@ export default {
       logs: {
         // range: []
       },
-      range: [],
+      range: [0, 1],
 
       // height: '0px',
       id: 'logs',
@@ -167,8 +167,8 @@ export default {
         '6': [{
           component: 'MyRange',
           options: {
-            range: this.range,
-            ref: 'MyRange'
+            range: 'range'
+            // ref: 'MyRange'
           }
         }],
         '7': [{
@@ -357,7 +357,7 @@ export default {
       this.$set(this.range, 0, payload.logs.range[0])
       this.$set(this.range, 1, payload.logs.range[1])
       // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
-      this.$refs['MyRange'].range = payload.logs.range
+      // this.$refs['MyRange'].range = payload.logs.range
       debug('__process_dashboard_logs', this.$refs['MyRange'])
     }
   }
