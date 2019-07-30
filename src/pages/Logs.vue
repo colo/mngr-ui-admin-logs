@@ -45,10 +45,7 @@ export default {
           component: 'admin-lte-small-box',
           options: {
             bg: 'bg-positive',
-            inner: {
-              header: 'Count',
-              text: '#'
-            },
+            inner: this.counter.inner,
             icon: 'fa fa-chart-bar'
           }
         }],
@@ -198,10 +195,16 @@ export default {
 
   data () {
     return {
-      logs: {
-        // range: []
-      },
+      // logs: {
+      //
+      // },
       range: [0, 1],
+      counter: {
+        inner: {
+          header: 'Count',
+          text: ''
+        }
+      },
 
       // height: '0px',
       id: 'logs',
@@ -359,13 +362,20 @@ export default {
       //   this.$store.commit('logs/set', payload.logs)
       //   this.create_pipelines(payload.logs)
       // }
-      this.logs = payload.logs
+      // this.logs = payload.logs
+      // for (const key in payload.logs) {
+      //   this.$set(this.logs, key, payload.logs[key])
+      // }
+      // debug('__process_dashboard_logs', this.logs)
 
       this.$set(this.range, 0, payload.logs.range[0])
       this.$set(this.range, 1, payload.logs.range[1])
+
+      this.$set(this.counter.inner, 'text', payload.logs.count)
+
       // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
       // this.$refs['MyRange'].range = payload.logs.range
-      debug('__process_dashboard_logs', this.$refs['MyRange'])
+      // debug('__process_dashboard_logs', this.$refs['MyRange'])
     }
   }
   // mounted: function () {

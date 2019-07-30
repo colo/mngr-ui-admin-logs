@@ -44,6 +44,10 @@
 </template>
 
 <script>
+
+import * as Debug from 'debug'
+const debug = Debug('components:AdminLte:SmallBox')
+
 export default {
   name: 'admin-lte-small-box',
 
@@ -109,6 +113,16 @@ export default {
   //     }
   //   }
   // },
+  watch: {
+    'innet.text': {
+      handler: function (val) {
+        debug('watch innet.text', val)
+
+        // this.rangeSnap = { min: val[0], max: val[1] }
+      },
+      deep: true
+    }
+  },
 
   data: function () {
     return {
