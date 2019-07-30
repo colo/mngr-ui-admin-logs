@@ -19,14 +19,14 @@ const debug = Debug('components:myRange')
 export default {
   name: 'MyRange',
 
-  // props: {
-  //   range: {
-  //     type: [Array],
-  //     default: function () {
-  //       return []
-  //     }
-  //   }
-  // },
+  props: {
+    range: {
+      type: [Array],
+      default: function () {
+        return []
+      }
+    }
+  },
 
   watch: {
     range: {
@@ -43,7 +43,7 @@ export default {
   },
   data () {
     return {
-      range: [],
+      // range: [],
       rangeSnap: {
         min: 0,
         max: 0

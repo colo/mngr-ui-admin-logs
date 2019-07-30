@@ -61,10 +61,11 @@
               <component
                 v-if="widget.component"
                 :is="resolveComponent(widget.component)"
-                v-dynamic-options="(widget.options) ? widget.options : {}"
+                v-bind="widget.options"
                 v-dynamic-events="(widget.events) ? widget.events : {}"
               />
-              <!-- v-bind="widget.options" -->
+              <!-- v-dynamic-options="(widget.options) ? widget.options : {}" -->
+
               <template v-else-if="widget.slot" >
                 {{widget.slot}}
               </template>
@@ -80,10 +81,10 @@
            <component
              v-if="widget.component"
              :is="widget.component"
-             v-dynamic-options="(widget.options) ? widget.options : {}"
+             v-bind="widget.options"
              v-dynamic-events="(widget.events) ? widget.events : {}"
            />
-           <!-- v-bind="widget.options" -->
+            <!-- v-dynamic-options="(widget.options) ? widget.options : {}" -->
            <template v-else-if="widget.slot" >
              {{widget.slot}}
            </template>

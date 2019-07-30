@@ -38,88 +38,9 @@ export default {
 
     }
 
-    if (components) { this.components = components }
-
-    if (grid) { this.grid = grid }
-
-    // let interval = setInterval(function () {
-    //   debug('setInterval', JSON.parse(JSON.stringify(this.grid['layouts']['lg'])))
-    //   this.grid.layouts.lg.push({ x: 5, y: 1, w: 7, h: 4, i: '6' })
-    //   debug('setInterval', JSON.parse(JSON.stringify(this.grid['layouts']['lg'])))
-    //   clearInterval(interval)
-    // }.bind(this), 5000)
-
-    EventBus.$on('logs', this.__process_dashboard_logs.bind(this))
-    this.create_pipelines()
-  },
-
-  data () {
-    return {
-      logs: {
-        // range: []
-      },
-      range: [0, 1],
-
-      // height: '0px',
-      id: 'logs',
-      grid: {
-        layouts: {
-          'lg': [
-            { x: 0, y: 0, w: 3, h: 7, i: '0' },
-            { x: 3, y: 0, w: 3, h: 7, i: '1' },
-            { x: 6, y: 0, w: 3, h: 7, i: '2' },
-            { x: 9, y: 0, w: 3, h: 7, i: '3' },
-            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
-            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
-            // second row
-            { x: 1, y: 1, w: 10, h: 2, i: '6' },
-            { x: 0, y: 2, w: 12, h: 16, i: '7' },
-            { x: 0, y: 3, w: 12, h: 30, i: '8' }
-            // { x: 0, y: 4, w: 12, h: 2, i: '9' }
-          ],
-          'md': [
-            { x: 0, y: 0, w: 2, h: 7, i: '0' },
-            { x: 2, y: 0, w: 2, h: 7, i: '1' },
-            { x: 4, y: 0, w: 2, h: 7, i: '2' },
-            { x: 6, y: 0, w: 2, h: 7, i: '3' },
-            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
-            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
-            // second row
-            { x: 1, y: 1, w: 6, h: 2, i: '6' },
-            { x: 0, y: 2, w: 8, h: 16, i: '7' },
-            { x: 0, y: 3, w: 8, h: 20, i: '8' }
-            // { x: 0, y: 4, w: 8, h: 2, i: '9' }
-
-          ],
-          'sm': [
-            { x: 0, y: 0, w: 3, h: 7, i: '0' },
-            { x: 3, y: 0, w: 3, h: 7, i: '1' },
-            { x: 0, y: 1, w: 3, h: 7, i: '2' },
-            { x: 3, y: 1, w: 3, h: 7, i: '3' },
-            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
-            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
-            // second row
-            { x: 1, y: 2, w: 4, h: 2, i: '6' },
-            { x: 0, y: 3, w: 6, h: 16, i: '7' },
-            { x: 0, y: 4, w: 6, h: 20, i: '8' }
-            // { x: 0, y: 5, w: 6, h: 2, i: '9' }
-          ]
-
-        },
-        breakpoint: 'lg',
-        // slots: [
-        //   '<q-btn round />'
-        // ],
-
-        cols: 12,
-        // breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
-        colsAll: { lg: 12, md: 8, sm: 6, xs: 4, xxs: 2 },
-        // rowHeight: 400,
-        isDraggable: false,
-        isResizable: false,
-        preview: true
-      },
-      components: {
+    debug('created', components)
+    if (!components || Object.keys(components).length === 0) {
+      components = {
         '0': [{
           component: 'admin-lte-small-box',
           options: {
@@ -167,7 +88,7 @@ export default {
         '6': [{
           component: 'MyRange',
           options: {
-            range: 'range'
+            range: this.range
             // ref: 'MyRange'
           }
         }],
@@ -256,6 +177,92 @@ export default {
         //   // defaultSize: 2
         // }]
       }
+    }
+
+    for (const key in components) {
+      this.$set(this.components, key, components[key])
+    }
+
+    if (grid) { this.grid = grid }
+
+    // let interval = setInterval(function () {
+    //   debug('setInterval', JSON.parse(JSON.stringify(this.grid['layouts']['lg'])))
+    //   this.grid.layouts.lg.push({ x: 5, y: 1, w: 7, h: 4, i: '6' })
+    //   debug('setInterval', JSON.parse(JSON.stringify(this.grid['layouts']['lg'])))
+    //   clearInterval(interval)
+    // }.bind(this), 5000)
+
+    EventBus.$on('logs', this.__process_dashboard_logs.bind(this))
+    this.create_pipelines()
+  },
+
+  data () {
+    return {
+      logs: {
+        // range: []
+      },
+      range: [0, 1],
+
+      // height: '0px',
+      id: 'logs',
+      grid: {
+        layouts: {
+          'lg': [
+            { x: 0, y: 0, w: 3, h: 7, i: '0' },
+            { x: 3, y: 0, w: 3, h: 7, i: '1' },
+            { x: 6, y: 0, w: 3, h: 7, i: '2' },
+            { x: 9, y: 0, w: 3, h: 7, i: '3' },
+            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
+            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
+            // second row
+            { x: 1, y: 1, w: 10, h: 2, i: '6' },
+            { x: 0, y: 2, w: 12, h: 16, i: '7' },
+            { x: 0, y: 3, w: 12, h: 30, i: '8' }
+            // { x: 0, y: 4, w: 12, h: 2, i: '9' }
+          ],
+          'md': [
+            { x: 0, y: 0, w: 2, h: 7, i: '0' },
+            { x: 2, y: 0, w: 2, h: 7, i: '1' },
+            { x: 4, y: 0, w: 2, h: 7, i: '2' },
+            { x: 6, y: 0, w: 2, h: 7, i: '3' },
+            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
+            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
+            // second row
+            { x: 1, y: 1, w: 6, h: 2, i: '6' },
+            { x: 0, y: 2, w: 8, h: 16, i: '7' },
+            { x: 0, y: 3, w: 8, h: 20, i: '8' }
+            // { x: 0, y: 4, w: 8, h: 2, i: '9' }
+
+          ],
+          'sm': [
+            { x: 0, y: 0, w: 3, h: 7, i: '0' },
+            { x: 3, y: 0, w: 3, h: 7, i: '1' },
+            { x: 0, y: 1, w: 3, h: 7, i: '2' },
+            { x: 3, y: 1, w: 3, h: 7, i: '3' },
+            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
+            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
+            // second row
+            { x: 1, y: 2, w: 4, h: 2, i: '6' },
+            { x: 0, y: 3, w: 6, h: 16, i: '7' },
+            { x: 0, y: 4, w: 6, h: 20, i: '8' }
+            // { x: 0, y: 5, w: 6, h: 2, i: '9' }
+          ]
+
+        },
+        breakpoint: 'lg',
+        // slots: [
+        //   '<q-btn round />'
+        // ],
+
+        cols: 12,
+        // breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
+        colsAll: { lg: 12, md: 8, sm: 6, xs: 4, xxs: 2 },
+        // rowHeight: 400,
+        isDraggable: false,
+        isResizable: false,
+        preview: true
+      },
+      components: {}
     }
   },
   methods: {
