@@ -41,43 +41,50 @@ export default {
     debug('created', components)
     if (!components || Object.keys(components).length === 0) {
       components = {
-        '0': [{
+        'count': [{
           component: 'admin-lte-small-box',
           options: {
             bg: 'bg-positive',
-            inner: this.counter.inner,
+            inner: {
+              header: 'Count',
+              text: ''
+              // text: this.logs.count
+            }, // this.counter.inner
             icon: 'fa fa-chart-bar'
           }
         }],
-        '1': [{
+        'range': [{
           component: 'admin-lte-small-box',
           options: {
             bg: 'bg-info',
             inner: {
               header: 'Range',
-              text: '26/07/2019 - 27/07/2019'
+              // text: '26/07/2019 - 27/07/2019'
+              text: ''
             },
             icon: 'fa fa-calendar'
           }
         }],
-        '2': [{
+        'tags': [{
           component: 'admin-lte-small-box',
           options: {
             bg: 'bg-info',
             inner: {
               header: 'Tags',
-              text: 'nginx - web - apache - stdin'
+              // text: 'nginx - web - apache - stdin'
+              text: ''
             },
             icon: 'fa fa-tags'
           }
         }],
-        '3': [{
+        'hosts': [{
           component: 'admin-lte-small-box',
           options: {
             bg: 'bg-info',
             inner: {
               header: 'Hosts',
-              text: 'colo'
+              // text: 'colo'
+              text: ''
             },
             icon: 'fa fa-server'
           }
@@ -195,26 +202,26 @@ export default {
 
   data () {
     return {
-      // logs: {
-      //
-      // },
-      range: [0, 1],
-      counter: {
-        inner: {
-          header: 'Count',
-          text: ''
-        }
+      logs: {
+        count: undefined
       },
+      range: [0, 1],
+      // counter: {
+      //   inner: {
+      //     header: 'Count',
+      //     text: ''
+      //   }
+      // },
 
       // height: '0px',
       id: 'logs',
       grid: {
         layouts: {
           'lg': [
-            { x: 0, y: 0, w: 3, h: 7, i: '0' },
-            { x: 3, y: 0, w: 3, h: 7, i: '1' },
-            { x: 6, y: 0, w: 3, h: 7, i: '2' },
-            { x: 9, y: 0, w: 3, h: 7, i: '3' },
+            { x: 0, y: 0, w: 3, h: 7, i: 'count' },
+            { x: 3, y: 0, w: 3, h: 7, i: 'range' },
+            { x: 6, y: 0, w: 3, h: 7, i: 'tags' },
+            { x: 9, y: 0, w: 3, h: 7, i: 'hosts' },
             // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
             // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
             // second row
@@ -224,10 +231,10 @@ export default {
             // { x: 0, y: 4, w: 12, h: 2, i: '9' }
           ],
           'md': [
-            { x: 0, y: 0, w: 2, h: 7, i: '0' },
-            { x: 2, y: 0, w: 2, h: 7, i: '1' },
-            { x: 4, y: 0, w: 2, h: 7, i: '2' },
-            { x: 6, y: 0, w: 2, h: 7, i: '3' },
+            { x: 0, y: 0, w: 2, h: 7, i: 'count' },
+            { x: 2, y: 0, w: 2, h: 7, i: 'range' },
+            { x: 4, y: 0, w: 2, h: 7, i: 'tags' },
+            { x: 6, y: 0, w: 2, h: 7, i: 'hosts' },
             // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
             // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
             // second row
@@ -238,10 +245,10 @@ export default {
 
           ],
           'sm': [
-            { x: 0, y: 0, w: 3, h: 7, i: '0' },
-            { x: 3, y: 0, w: 3, h: 7, i: '1' },
-            { x: 0, y: 1, w: 3, h: 7, i: '2' },
-            { x: 3, y: 1, w: 3, h: 7, i: '3' },
+            { x: 0, y: 0, w: 3, h: 7, i: 'count' },
+            { x: 3, y: 0, w: 3, h: 7, i: 'range' },
+            { x: 0, y: 1, w: 3, h: 7, i: 'tags' },
+            { x: 3, y: 1, w: 3, h: 7, i: 'hosts' },
             // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
             // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
             // second row
@@ -371,7 +378,10 @@ export default {
       this.$set(this.range, 0, payload.logs.range[0])
       this.$set(this.range, 1, payload.logs.range[1])
 
-      this.$set(this.counter.inner, 'text', payload.logs.count)
+      // this.$set(this.counter.inner, 'text', payload.logs.count)
+      for (const key in payload.logs) {
+        if (this.components[key]) { this.$set(this.components[key][0].options.inner, 'text', payload.logs[key]) }
+      }
 
       // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
       // this.$refs['MyRange'].range = payload.logs.range
