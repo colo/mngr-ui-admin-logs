@@ -4,8 +4,8 @@ import * as Debug from 'debug'
 const debug = Debug('pages:Logs')
 
 import AdminLteMixin from '@components/mixins/adminlte'
-
 import GridViewMixin from '@components/mixins/gridView'
+import DataSourcesMixin from '@components/mixins/dataSources'
 
 // import Test from '@components/test/test.vue'
 
@@ -18,7 +18,7 @@ const { height, width } = dom
 import { EventBus } from '@libs/eventbus'
 
 export default {
-  mixins: [AdminLteMixin, GridViewMixin],
+  mixins: [AdminLteMixin, GridViewMixin, DataSourcesMixin],
 
   name: 'Logs',
   // components: { GridView },
