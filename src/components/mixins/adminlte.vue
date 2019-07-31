@@ -3,7 +3,7 @@
 import '@components/adminlte/index'
 
 import * as Debug from 'debug'
-const debug = Debug('components:AdminLte')
+const debug = Debug('components:mixins:AdminLte')
 
 // import Vue from 'vue';
 // export const EventBus = new Vue();
@@ -25,6 +25,7 @@ export default {
   },
 
   mounted: function(){
+    debug('mounted')
     ready(this.admin_lte_ui())
   },
   // mounted () {

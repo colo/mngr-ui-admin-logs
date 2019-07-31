@@ -387,11 +387,10 @@ export default {
       // this.$refs['MyRange'].range = payload.logs.range
       // debug('__process_dashboard_logs', this.$refs['MyRange'])
     }
+  },
+  mounted: function () {
+    debug('mounted')
   }
-  // mounted: function () {
-  //   // console.log('height:', height(document.getElementById('logs')))
-  //   this.height = this.getGridHeight() + 'px'
-  // }
   // updated: function () {
   //   // console.log('height:', height(document.getElementById('logs')))
   //   this.height = this.getGridHeight() + 'px'

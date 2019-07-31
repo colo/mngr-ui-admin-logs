@@ -132,7 +132,7 @@ import camelCase from 'lodash/camelCase'
 import Vue from 'vue'
 
 import * as Debug from 'debug'
-const debug = Debug('components:gridView')
+const debug = Debug('components:mixins:gridView')
 
 import draggable from 'vuedraggable'
 import { VueResponsiveGridLayout, VueGridItem } from 'vue-responsive-grid-layout'
@@ -228,6 +228,7 @@ export default {
     debug('updated', height(this.$refs.logs.$el))
   },
   mounted: function () {
+    debug('mounted', this.getGridHeight())
     // console.log('height:', height(document.getElementById('logs')))
     this.height = this.getGridHeight() + 'px'
   },
