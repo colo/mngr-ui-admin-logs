@@ -84,7 +84,9 @@ export default new Class({
     if(doc.status){
       debug('ERROR logs %o', doc)
     }
-    else if(doc.logs && (!doc.opts || !doc.opts.params || Object.getLength(doc.opts.params) === 0)){
+    else if(
+      doc.data
+      && (!doc.metadata.opts || !doc.metadata.opts.params || Object.getLength(doc.metadata.opts.params) === 0)){
       debug('logs %o', doc)
       // Array.each(doc.logs.tags, function(tag){
       //   debug('TAG %s', tag)

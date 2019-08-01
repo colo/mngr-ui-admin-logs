@@ -41,17 +41,30 @@ export default {
     }
 
   ],
-  filters: [
-    function (doc, opts, next, pipeline) {
-      debug('filter', doc)
-      next(doc, opts, next, pipeline)
-    }
-  ],
+  // filters: [
+  //   function (doc, opts, next, pipeline) {
+  //     debug('filter', doc, JSON.stringify(doc.opts.query))
+  //     let newDoc = {}
+  //     newDoc.input = doc.input
+  //     newDoc[doc.input] = doc[doc.input]
+  //
+  //     let key = {}
+  //
+  //     if (doc.opts.params && Object.keys(doc.opts.params).length > 0) { key.params = doc.opts.params }
+  //
+  //     if (doc.opts.query && Object.keys(doc.opts.query).length > 0) { key.query = doc.opts.query }
+  //
+  //     if (Object.keys(key).length > 0) { newDoc.key = JSON.stringify(key) }
+  //
+  //     debug('filter newDoc', newDoc, key)
+  //     next(newDoc, opts, next, pipeline)
+  //   }
+  // ],
   output: [
     function (payload) {
       debug('OUTPUT', payload)
 
-      if (!payload.err) { EventBus.$emit(payload.input, payload) }
+      if (!payload.err) { EventBus.$emit(payload.metadata.input, payload) }
 
       // if (!payload.err) { EventBus.$emit('log', payload) }
     }

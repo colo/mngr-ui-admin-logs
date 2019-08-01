@@ -78,12 +78,12 @@ export default {
       // }
       // debug('__process_dashboard_logs', this.logs)
 
-      this.$set(this.range, 0, payload.logs.range[0])
-      this.$set(this.range, 1, payload.logs.range[1])
+      this.$set(this.range, 0, payload.data.range[0])
+      this.$set(this.range, 1, payload.data.range[1])
 
       // this.$set(this.counter.inner, 'text', payload.logs.count)
-      for (const key in payload.logs) {
-        if (this.components[key]) { this.$set(this.components[key][0].options.inner, 'text', payload.logs[key]) }
+      for (const key in payload.data) {
+        if (this.components[key]) { this.$set(this.components[key][0].options.inner, 'text', payload.data[key]) }
       }
 
       // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
