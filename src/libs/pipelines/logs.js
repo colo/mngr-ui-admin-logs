@@ -13,7 +13,6 @@ import InputIOLogs from '@libs/pipelines/input/io.logs'
 let buffer = {}
 
 import * as Debug from 'debug'
-
 const debug = Debug('libs:pipelines:logs')
 
 export default {
@@ -41,6 +40,12 @@ export default {
       }
     }
 
+  ],
+  filters: [
+    function (doc, opts, next, pipeline) {
+      debug('filter', doc)
+      next(doc, opts, next, pipeline)
+    }
   ],
   output: [
     function (payload) {

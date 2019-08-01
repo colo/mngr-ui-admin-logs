@@ -12,10 +12,8 @@ import DataSourcesMixin from '@components/mixins/dataSources'
 import Pipeline from 'js-pipeline'
 import LogsPipeline from '@libs/pipelines/logs'
 
-import { dom } from 'quasar'
-const { height, width } = dom
-
-import { EventBus } from '@libs/eventbus'
+// import { dom } from 'quasar'
+// const { height, width } = dom
 
 export default {
   mixins: [AdminLteMixin, GridViewMixin, DataSourcesMixin],
@@ -23,7 +21,88 @@ export default {
   name: 'Logs',
   // components: { GridView },
 
-  pipelines: {},
+  // pipelines: {},
+
+  data () {
+    return {
+      /**
+      * dataSources
+      **/
+      store: true,
+
+      logs: {
+        count: undefined
+      },
+      range: [0, 1],
+      // counter: {
+      //   inner: {
+      //     header: 'Count',
+      //     text: ''
+      //   }
+      // },
+
+      // height: '0px',
+      id: 'logs',
+      grid: {
+        layouts: {
+          'lg': [
+            { x: 0, y: 0, w: 3, h: 7, i: 'count' },
+            { x: 3, y: 0, w: 3, h: 7, i: 'range' },
+            { x: 6, y: 0, w: 3, h: 7, i: 'tags' },
+            { x: 9, y: 0, w: 3, h: 7, i: 'hosts' },
+            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
+            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
+            // second row
+            { x: 1, y: 1, w: 10, h: 2, i: '6' },
+            { x: 0, y: 2, w: 12, h: 16, i: '7' },
+            { x: 0, y: 3, w: 12, h: 30, i: '8' }
+            // { x: 0, y: 4, w: 12, h: 2, i: '9' }
+          ],
+          'md': [
+            { x: 0, y: 0, w: 2, h: 7, i: 'count' },
+            { x: 2, y: 0, w: 2, h: 7, i: 'range' },
+            { x: 4, y: 0, w: 2, h: 7, i: 'tags' },
+            { x: 6, y: 0, w: 2, h: 7, i: 'hosts' },
+            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
+            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
+            // second row
+            { x: 1, y: 1, w: 6, h: 2, i: '6' },
+            { x: 0, y: 2, w: 8, h: 16, i: '7' },
+            { x: 0, y: 3, w: 8, h: 20, i: '8' }
+            // { x: 0, y: 4, w: 8, h: 2, i: '9' }
+
+          ],
+          'sm': [
+            { x: 0, y: 0, w: 3, h: 7, i: 'count' },
+            { x: 3, y: 0, w: 3, h: 7, i: 'range' },
+            { x: 0, y: 1, w: 3, h: 7, i: 'tags' },
+            { x: 3, y: 1, w: 3, h: 7, i: 'hosts' },
+            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
+            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
+            // second row
+            { x: 1, y: 2, w: 4, h: 2, i: '6' },
+            { x: 0, y: 3, w: 6, h: 16, i: '7' },
+            { x: 0, y: 4, w: 6, h: 20, i: '8' }
+            // { x: 0, y: 5, w: 6, h: 2, i: '9' }
+          ]
+
+        },
+        breakpoint: 'lg',
+        // slots: [
+        //   '<q-btn round />'
+        // ],
+
+        cols: 12,
+        // breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
+        colsAll: { lg: 12, md: 8, sm: 6, xs: 4, xxs: 2 },
+        // rowHeight: 400,
+        isDraggable: false,
+        isResizable: false,
+        preview: true
+      },
+      components: {}
+    }
+  },
 
   created: function () {
     let components
@@ -196,85 +275,10 @@ export default {
     //   clearInterval(interval)
     // }.bind(this), 5000)
 
-    EventBus.$on('logs', this.__process_dashboard_logs.bind(this))
-    this.create_pipelines()
+    // EventBus.$on('logs', this.__process_dashboard_logs.bind(this))
+    // this.create_pipelines()
   },
 
-  data () {
-    return {
-      logs: {
-        count: undefined
-      },
-      range: [0, 1],
-      // counter: {
-      //   inner: {
-      //     header: 'Count',
-      //     text: ''
-      //   }
-      // },
-
-      // height: '0px',
-      id: 'logs',
-      grid: {
-        layouts: {
-          'lg': [
-            { x: 0, y: 0, w: 3, h: 7, i: 'count' },
-            { x: 3, y: 0, w: 3, h: 7, i: 'range' },
-            { x: 6, y: 0, w: 3, h: 7, i: 'tags' },
-            { x: 9, y: 0, w: 3, h: 7, i: 'hosts' },
-            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
-            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
-            // second row
-            { x: 1, y: 1, w: 10, h: 2, i: '6' },
-            { x: 0, y: 2, w: 12, h: 16, i: '7' },
-            { x: 0, y: 3, w: 12, h: 30, i: '8' }
-            // { x: 0, y: 4, w: 12, h: 2, i: '9' }
-          ],
-          'md': [
-            { x: 0, y: 0, w: 2, h: 7, i: 'count' },
-            { x: 2, y: 0, w: 2, h: 7, i: 'range' },
-            { x: 4, y: 0, w: 2, h: 7, i: 'tags' },
-            { x: 6, y: 0, w: 2, h: 7, i: 'hosts' },
-            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
-            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
-            // second row
-            { x: 1, y: 1, w: 6, h: 2, i: '6' },
-            { x: 0, y: 2, w: 8, h: 16, i: '7' },
-            { x: 0, y: 3, w: 8, h: 20, i: '8' }
-            // { x: 0, y: 4, w: 8, h: 2, i: '9' }
-
-          ],
-          'sm': [
-            { x: 0, y: 0, w: 3, h: 7, i: 'count' },
-            { x: 3, y: 0, w: 3, h: 7, i: 'range' },
-            { x: 0, y: 1, w: 3, h: 7, i: 'tags' },
-            { x: 3, y: 1, w: 3, h: 7, i: 'hosts' },
-            // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
-            // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
-            // second row
-            { x: 1, y: 2, w: 4, h: 2, i: '6' },
-            { x: 0, y: 3, w: 6, h: 16, i: '7' },
-            { x: 0, y: 4, w: 6, h: 20, i: '8' }
-            // { x: 0, y: 5, w: 6, h: 2, i: '9' }
-          ]
-
-        },
-        breakpoint: 'lg',
-        // slots: [
-        //   '<q-btn round />'
-        // ],
-
-        cols: 12,
-        // breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
-        colsAll: { lg: 12, md: 8, sm: 6, xs: 4, xxs: 2 },
-        // rowHeight: 400,
-        isDraggable: false,
-        isResizable: false,
-        preview: true
-      },
-      components: {}
-    }
-  },
   methods: {
     // myStyle: function (offset) {
     //   // const size = `calc(100vh - ${offset}px)`
@@ -288,10 +292,10 @@ export default {
     //   debug('getRange', this.logs)
     //   return (this.logs && this.logs.range) ? this.logs.range : []
     // },
-    getGridHeight: function () {
-      debug('getGridHeight', height(document.getElementById('logs')))
-      return height(document.getElementById('logs')) + 700
-    },
+    // getGridHeight: function () {
+    //   debug('getGridHeight', height(document.getElementById('logs')))
+    //   return height(document.getElementById('logs')) + 700
+    // },
 
     /**
     * @start pipelines
@@ -335,58 +339,46 @@ export default {
       }
 
       if (next) { next() }
-    },
-    destroy_pipelines: function () {
-      debug('destroy_pipelines')
+    }
 
-      Object.each(this.$options.pipelines, function (pipe, id) { // destroy old ones
-        pipe.fireEvent('onSuspend')
-        pipe.fireEvent('onExit')
-        pipe.removeEvents()
-
-        delete this.$options.pipelines[id]
-      }.bind(this))
-
-      debug('destroy_pipelines', this.$options.pipelines)
-    },
     /**
     * @end pipelines
     **/
-    __process_dashboard_logs: function (payload) {
-      debug('__process_dashboard_logs', payload)
-
-      // if (Array.isArray(payload.logs) && payload.logs.length > 0) {
-      //   let _menu = {}
-      //   Array.each(payload.logs, function (log) {
-      //     _menu[log] = {
-      //       label: log, icon: 'desktop_windows', route: { name: 'log', params: { log: log } }
-      //     }
-      //   })
-      //
-      //   this.$set(this.panels.charts.menu.logs, 'menu', _menu)
-      //
-      //   this.$store.commit('logs/clear')
-      //   this.$store.commit('logs/set', payload.logs)
-      //   this.create_pipelines(payload.logs)
-      // }
-      // this.logs = payload.logs
-      // for (const key in payload.logs) {
-      //   this.$set(this.logs, key, payload.logs[key])
-      // }
-      // debug('__process_dashboard_logs', this.logs)
-
-      this.$set(this.range, 0, payload.logs.range[0])
-      this.$set(this.range, 1, payload.logs.range[1])
-
-      // this.$set(this.counter.inner, 'text', payload.logs.count)
-      for (const key in payload.logs) {
-        if (this.components[key]) { this.$set(this.components[key][0].options.inner, 'text', payload.logs[key]) }
-      }
-
-      // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
-      // this.$refs['MyRange'].range = payload.logs.range
-      // debug('__process_dashboard_logs', this.$refs['MyRange'])
-    }
+    // __process_dashboard_logs: function (payload) {
+    //   debug('__process_dashboard_logs', payload)
+    //
+    //   // if (Array.isArray(payload.logs) && payload.logs.length > 0) {
+    //   //   let _menu = {}
+    //   //   Array.each(payload.logs, function (log) {
+    //   //     _menu[log] = {
+    //   //       label: log, icon: 'desktop_windows', route: { name: 'log', params: { log: log } }
+    //   //     }
+    //   //   })
+    //   //
+    //   //   this.$set(this.panels.charts.menu.logs, 'menu', _menu)
+    //   //
+    //   //   this.$store.commit('logs/clear')
+    //   //   this.$store.commit('logs/set', payload.logs)
+    //   //   this.create_pipelines(payload.logs)
+    //   // }
+    //   // this.logs = payload.logs
+    //   // for (const key in payload.logs) {
+    //   //   this.$set(this.logs, key, payload.logs[key])
+    //   // }
+    //   // debug('__process_dashboard_logs', this.logs)
+    //
+    //   this.$set(this.range, 0, payload.logs.range[0])
+    //   this.$set(this.range, 1, payload.logs.range[1])
+    //
+    //   // this.$set(this.counter.inner, 'text', payload.logs.count)
+    //   for (const key in payload.logs) {
+    //     if (this.components[key]) { this.$set(this.components[key][0].options.inner, 'text', payload.logs[key]) }
+    //   }
+    //
+    //   // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
+    //   // this.$refs['MyRange'].range = payload.logs.range
+    //   // debug('__process_dashboard_logs', this.$refs['MyRange'])
+    // }
   },
   mounted: function () {
     debug('mounted')
