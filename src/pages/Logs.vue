@@ -166,7 +166,7 @@ export default {
             inner: {
               header: 'Hosts',
               // text: 'colo'
-              text: ''
+              text: this.components_data['periodical?register=periodical&transformation=limit%3A30000'].hosts
             },
             icon: 'fa fa-server'
           }
@@ -175,7 +175,7 @@ export default {
           component: 'MyRange',
           options: {
             // range: this.$store.state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000']['range']
-            range: this['periodical?register=periodical&transformation=limit%3A30000']['range']
+            range: this.components_data['periodical?register=periodical&transformation=limit%3A30000'].range
             // range: this.MyRange
             // ref: 'MyRange'
           }

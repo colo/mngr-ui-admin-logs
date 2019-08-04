@@ -8,7 +8,7 @@ import sourceStore from 'src/store/source'
 
 import { EventBus } from '@libs/eventbus'
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'data-sources',
@@ -28,13 +28,15 @@ export default {
   data () {
     return {
       id: undefined,
-      'periodical?register=periodical&transformation=limit%3A30000': { range: [] },
+      components_data: {
+        'periodical?register=periodical&transformation=limit%3A30000': { range: [], hosts: [] }
+      },
       store: false,
       // EventBus: EventBus
-      MyRange: [],
-      components_data: {
-
-      }
+      MyRange: []
+      // components_data: {
+      //
+      // }
     }
   },
 
@@ -64,11 +66,19 @@ export default {
 
   // computed: mapState({
   //
-  //   'periodical?register=periodical&transformation=limit%3A30000' (state) {
+  //   'periodical?register=periodical&transformation=limit%3A30000.range' (state) {
   //     debug('computed', state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000'])
-  //     return state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000']
+  //     return (state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000']) ? state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000'].range : undefined
   //   }
   // }),
+  // computed: {
+  //   // mix the getters into computed with object spread operator
+  //   ...mapGetters([
+  //     'doneTodosCount',
+  //     'anotherGetter',
+  //     // ...
+  //   ])
+  // }
   methods: {
     // __process_data: function (payload) {
     //   debug('__process_data', payload)
@@ -183,15 +193,18 @@ export default {
       // this.$store.commit(this.id + '_sources/add', { id: 'periodical?register=periodical&transformation=limit%3A30000', data: { range: [] } })
 
       this.$store.watch((state) => state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000'], (val, oldVal) => {
+        if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000']) { this.$set(this.components_data, 'periodical?register=periodical&transformation=limit%3A30000', {}) }
+
         debug('watcher', val)
         for (const key in val) {
           if (Array.isArray(val[key])) {
+            // if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, null)
             for (const i in val[key]) {
-              if (!this['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this['periodical?register=periodical&transformation=limit%3A30000'], key, [])
-              this.$set(this['periodical?register=periodical&transformation=limit%3A30000'][key], i, val[key][i])
+              if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, [])
+              this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key], i, val[key][i])
             }
           } else {
-            this.$set(this['periodical?register=periodical&transformation=limit%3A30000'], key, val[key])
+            this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, val[key])
           }
         }
         // this.$set(this.components_data, 'periodical?register=periodical&transformation=limit%3A30000', val)
