@@ -46,7 +46,7 @@ export default {
   filters: [
     function (doc, opts, next, pipeline) {
       debug('filter', doc, qs.stringify(doc.metadata.opts.query))
-      doc.id = doc.metadata.from + '?' + qs.stringify(doc.metadata.opts.query)
+      doc.id = doc.metadata.input + '?' + qs.stringify(doc.metadata.opts.query)
       // let newDoc = Object.clone(doc)
       // newDoc.key = ''
       //

@@ -233,13 +233,13 @@ export default new Class({
       //   }
       // })
 
-      this.io.emit('on', 'periodical', {
-        // range: "posix 1557135759000-1557136059000/*",
-        body: {
-          "transformation" : "limit:30000"
-        //   "interval": 5000,
-        }
-      })
+      // this.io.emit('on', 'periodical', {
+      //   // range: "posix 1557135759000-1557136059000/*",
+      //   body: {
+      //     "transformation" : "limit:30000"
+      //   //   "interval": 5000,
+      //   }
+      // })
 
       // this.io.emit('on', 'periodical', {
       //   // range: "posix 1557135759000-1557136059000/*",
@@ -247,7 +247,13 @@ export default new Class({
       //      "aggregation": "count"
       //   }
       // })
-      // this.io.emit('/')
+      this.io.emit('/', {
+        query: {register: 'periodical'},
+        body: {
+          "transformation" : "limit:30000"
+
+        }
+      })
 
     })
 

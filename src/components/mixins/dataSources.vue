@@ -10,6 +10,8 @@ import { EventBus } from '@libs/eventbus'
 
 import { mapState, mapGetters } from 'vuex'
 
+let qs = require('qs')
+
 export default {
   name: 'data-sources',
 
@@ -80,47 +82,45 @@ export default {
   //   ])
   // }
   methods: {
-    // __process_data: function (payload) {
-    //   debug('__process_data', payload)
-    //
-    //   // if (Array.isArray(payload.logs) && payload.logs.length > 0) {
-    //   //   let _menu = {}
-    //   //   Array.each(payload.logs, function (log) {
-    //   //     _menu[log] = {
-    //   //       label: log, icon: 'desktop_windows', route: { name: 'log', params: { log: log } }
-    //   //     }
-    //   //   })
-    //   //
-    //   //   this.$set(this.panels.charts.menu.logs, 'menu', _menu)
-    //   //
-    //   //   this.$store.commit('logs/clear')
-    //   //   this.$store.commit('logs/set', payload.logs)
-    //   //   this.create_pipelines(payload.logs)
-    //   // }
-    //   // this.logs = payload.logs
-    //   // for (const key in payload.logs) {
-    //   //   this.$set(this.logs, key, payload.logs[key])
-    //   // }
-    //   // debug('__process_dashboard_logs', this.logs)
-    //
-    //   this.$set(this.range, 0, payload.data.range[0])
-    //   this.$set(this.range, 1, payload.data.range[1])
-    //
-    //   // this.$set(this.counter.inner, 'text', payload.logs.count)
-    //   for (const key in payload.data) {
-    //     if (this.components[key]) { this.$set(this.components[key][0].options.inner, 'text', payload.data[key]) }
-    //   }
-    //
-    //   // this.$set(this.components[6][0].options.range, 0, payload.logs.range[0])
-    //   // this.$refs['MyRange'].range = payload.logs.range
-    //   // debug('__process_dashboard_logs', this.$refs['MyRange'])
-    // },
+    __update_component_data: function (component, data) {
+      if (component.onData && typeof component.onData === 'function') {
+        debug('__update_component_data', component)
+        component.onData.attempt(data, component)
+      }
+    },
+    __source_to_string: function (query) {
+      if (typeof query === 'string') {
+        return query
+      } else {
+        let _query = Object.merge(query.query, query.body)
+        debug('__query_to_string', this.id + '?' + qs.stringify(_query))
+        return query.path + '?' + qs.stringify(_query)
+      }
+    },
     __process_data: function (payload) {
-      debug('__process_dashboard_data', payload)
+      debug('__process_data', payload)
       // for (const key in payload.data) {
       //   this.$store.commit(this.id + '_sources/append', { id: payload.id, key: key, data: payload.data[key] })
       // }
-      this.$store.commit(this.id + '_sources/add', payload)
+      if (this.store) {
+        this.$store.commit(this.id + '_sources/add', payload)
+      } else {
+        let key = payload.id
+        for (const prop in this.components) {
+          let components = this.components[prop]
+          if (Array.isArray(components)) {
+            for (const index in components) {
+              if (components[index].source && this.__source_to_string(components[index].source) === key) {
+                this.__update_component_data(components[index], payload.data)
+              }
+            }
+          } else {
+            if (components.source && this.__source_to_string(components.source) === key) {
+              this.__update_component_data(components, payload.data)
+            }
+          }
+        }
+      }
 
       // if(payload.range === true)
       // //console.log('recived doc via Event stats', payload)
@@ -192,25 +192,30 @@ export default {
 
       // this.$store.commit(this.id + '_sources/add', { id: 'periodical?register=periodical&transformation=limit%3A30000', data: { range: [] } })
 
-      this.$store.watch((state) => state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000'], (val, oldVal) => {
-        if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000']) { this.$set(this.components_data, 'periodical?register=periodical&transformation=limit%3A30000', {}) }
-
-        debug('watcher', val)
-        for (const key in val) {
-          if (Array.isArray(val[key])) {
-            // if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, null)
-            for (const i in val[key]) {
-              if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, [])
-              this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key], i, val[key][i])
-            }
-          } else {
-            this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, val[key])
-          }
-        }
-        // this.$set(this.components_data, 'periodical?register=periodical&transformation=limit%3A30000', val)
-        // this.$set(this.MyRange, 0, val.range[0])
-        // this.$set(this.MyRange, 1, val.range[1])
-      })
+      // this.$store.watch((state) => state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000'], (val, oldVal) => {
+      //   // if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000']) { this.$set(this.components_data, 'periodical?register=periodical&transformation=limit%3A30000', {}) }
+      //
+      //   debug('watcher', val)
+      //   if (val['range']) {
+      //     for (const index in val['range']) {
+      //       this.$set(this.components['6'][0].options.range, index, val['range'][index])
+      //     }
+      //   }
+      //   // for (const key in val) {
+      //   //   if (Array.isArray(val[key])) {
+      //   //     // if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, null)
+      //   //     for (const i in val[key]) {
+      //   //       if (!this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key]) this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, [])
+      //   //       this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'][key], i, val[key][i])
+      //   //     }
+      //   //   } else {
+      //   //     this.$set(this.components_data['periodical?register=periodical&transformation=limit%3A30000'], key, val[key])
+      //   //   }
+      //   // }
+      //   // this.$set(this.components_data, 'periodical?register=periodical&transformation=limit%3A30000', val)
+      //   // this.$set(this.MyRange, 0, val.range[0])
+      //   // this.$set(this.MyRange, 1, val.range[1])
+      // })
     },
     __unregister_store_module: function (id) {
       debug('__unregister_store_module', id)

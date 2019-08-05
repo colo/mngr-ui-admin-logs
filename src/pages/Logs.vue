@@ -28,7 +28,7 @@ export default {
       /**
       * dataSources
       **/
-      store: true,
+      store: false,
 
       logs: {
         count: undefined
@@ -105,7 +105,7 @@ export default {
   },
 
   // watch:{
-  //   this.$store.state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000']
+  //   this.$store.state[this.id + '_sources']['logs?register=periodical&transformation=limit%3A30000']
   // },
   created: function () {
     let components
@@ -133,6 +133,10 @@ export default {
               // text: this.logs.count
             }, // this.counter.inner
             icon: 'fa fa-chart-bar'
+          },
+          source: 'logs?register=periodical&transformation=limit%3A30000',
+          onData: function (val) {
+            this.options.inner.text = val.count
           }
         }],
         'range': [{
@@ -145,6 +149,10 @@ export default {
               text: ''
             },
             icon: 'fa fa-calendar'
+          },
+          source: 'logs?register=periodical&transformation=limit%3A30000',
+          onData: function (val) {
+            this.options.inner.text = val.range
           }
         }],
         'tags': [{
@@ -157,6 +165,10 @@ export default {
               text: ''
             },
             icon: 'fa fa-tags'
+          },
+          source: 'logs?register=periodical&transformation=limit%3A30000',
+          onData: function (val) {
+            this.options.inner.text = val.tags
           }
         }],
         'hosts': [{
@@ -166,18 +178,34 @@ export default {
             inner: {
               header: 'Hosts',
               // text: 'colo'
-              text: this.components_data['periodical?register=periodical&transformation=limit%3A30000'].hosts
+              text: ''
             },
             icon: 'fa fa-server'
+          },
+          source: 'logs?register=periodical&transformation=limit%3A30000',
+          onData: function (val) {
+            this.options.inner.text = val.hosts
           }
         }],
         '6': [{
           component: 'MyRange',
           options: {
-            // range: this.$store.state[this.id + '_sources']['periodical?register=periodical&transformation=limit%3A30000']['range']
-            range: this.components_data['periodical?register=periodical&transformation=limit%3A30000'].range
+            // range: this.$store.state[this.id + '_sources']['logs?register=periodical&transformation=limit%3A30000']['range']
+            range: []
             // range: this.MyRange
             // ref: 'MyRange'
+          },
+          // source: 'logs?register=periodical&transformation=limit%3A30000',
+          source: {
+            path: 'logs',
+            query: { register: 'periodical' },
+            body: {
+              'transformation': 'limit:30000'
+
+            }
+          },
+          onData: function (val) {
+            this.options.range = val.range
           }
         }],
         '7': [{
