@@ -198,11 +198,11 @@ export default {
           // source: 'logs?register=periodical&transformation=limit%3A30000',
           source: {
             path: 'logs',
-            query: { register: 'periodical' },
-            body: {
-              'transformation': 'limit:30000'
-
-            }
+            query: { register: 'periodical', 'transformation': 'limit:30000' }
+            // body: {
+            //   'transformation': 'limit:30000'
+            //
+            // }
           },
           onData: function (val) {
             this.options.range = val.range
@@ -333,8 +333,8 @@ export default {
     /**
     * @start pipelines
     **/
-    create_pipelines: function (logs, next) {
-      debug('create_pipelines', logs)
+    create_pipelines: function (next) {
+      debug('create_pipelines')
 
       // if (logs && Array.isArray(logs)) {
       //   Array.each(logs, function (log) {
@@ -361,6 +361,9 @@ export default {
       let template = Object.clone(LogsPipeline)
 
       let pipeline_id = template.input[0].poll.id
+      debug('LogsPipeline ', template.input[0].poll.conn[0])
+      template.input[0].poll.conn[0].requests = { once: [] }
+      template.input[0].poll.conn[0].requests.once = this.__components_sources_to_request(JSON.parse(JSON.stringify(this.components)))
 
       if (!this.$options.pipelines[pipeline_id]) {
         let pipe = new Pipeline(template)

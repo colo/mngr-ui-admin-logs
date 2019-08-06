@@ -33,10 +33,8 @@ export default new Class({
   	requests : {
       once: [
 
-
 			],
 			periodical: [
-
 
 			],
 
@@ -58,12 +56,12 @@ export default new Class({
 					callbacks: ['logs'],
 					// middlewares: [], //socket.use(fn)
 				}],
-        'on': [{
-					// path: ':param',
-					// once: true, //socket.once
-					callbacks: ['register'],
-					// middlewares: [], //socket.use(fn)
-				}],
+        // 'on': [{
+				// 	// path: ':param',
+				// 	// once: true, //socket.once
+				// 	callbacks: ['register'],
+				// 	// middlewares: [], //socket.use(fn)
+				// }],
 				// '*': [{// catch all
 				// 	path: '',
 				// 	callbacks: ['not_found_message'],
@@ -74,10 +72,10 @@ export default new Class({
 
 
   },
-  register: function(socket, next, result){
-    debug('register %o', result)
-
-  },
+  // register: function(socket, next, result){
+  //   debug('register %o', result)
+  //
+  // },
   logs: function(socket, next, doc){
     // let {type} = doc
 
@@ -158,7 +156,7 @@ export default new Class({
 	// },
 
   initialize: function(options){
-    debug('initialize')
+    debug('initialize', options)
 
 		this.parent(options);//override default options
 
@@ -247,13 +245,13 @@ export default new Class({
       //      "aggregation": "count"
       //   }
       // })
-      this.io.emit('/', {
-        query: {register: 'periodical'},
-        body: {
-          "transformation" : "limit:30000"
-
-        }
-      })
+      // this.io.emit('/', {
+      //   query: {register: 'periodical'},
+      //   body: {
+      //     "transformation" : "limit:30000"
+      //
+      //   }
+      // })
 
     })
 

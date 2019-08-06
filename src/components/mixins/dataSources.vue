@@ -21,24 +21,17 @@ export default {
 
   pipelines: {},
 
-  sources: {
-    data: {},
-    stat: {},
-    tabular: {}
-  },
+  // sources: {
+  //   data: {},
+  //   stat: {},
+  //   tabular: {}
+  // },
 
   data () {
     return {
       id: undefined,
-      components_data: {
-        'periodical?register=periodical&transformation=limit%3A30000': { range: [], hosts: [] }
-      },
-      store: false,
-      // EventBus: EventBus
-      MyRange: []
-      // components_data: {
-      //
-      // }
+      store: false
+
     }
   },
 
@@ -53,12 +46,11 @@ export default {
     EventBus.$on(this.id, this.__process_data.bind(this))
 
     if (this.store) this.__register_store_module(this.id, sourceStore)
-
-    this.create_pipelines()
   },
 
   mounted: function () {
     debug('mounted')
+    this.create_pipelines()
   },
   updated: function () {
   },
@@ -230,7 +222,62 @@ export default {
     /**
     * @start pipelines
     **/
-    create_pipelines: function () {},
+    create_pipelines: function (next) {
+    },
+    __components_sources_to_request: function (_components) {
+      let requests = []
+      let sources = {}
+
+      // let _components = JSON.parse(JSON.stringify(this.components))
+      debug('__components_sources_to_request', _components)
+      for (const key in _components) {
+        let components = _components[key]
+
+        if (!Array.isArray(components)) {
+          components = [components]
+        }
+
+        for (const index in components) {
+          if (components[index].source) {
+            let key_source = components[index].source
+            let source = components[index].source
+            if (typeof source === 'string') {
+              source = { path: source.substring(0, source.indexOf('?')), query: qs.parse(source.substring(source.indexOf('?') + 1)) }
+            } else {
+              key_source = key_source.path + '?' + qs.stringify(Object.merge(key_source.query, key_source.body))
+            }
+
+            sources[key_source] = source
+          }
+        }
+      }
+
+      // debug('__components_sources_to_request', sources)
+      for (const key in sources) {
+        requests.push({
+          init: function (req, next, app) {
+            debug('INIT', app)
+            app.io.emit('/', { query: sources[key].query })
+          }
+        })
+      }
+
+      debug('__components_sources_to_request', requests)
+      return requests
+      // template.input[0].poll.conn[0].requests.once.push({
+      //   init: function (req, next, app) {
+      //     debug('INIT', app)
+      //     app.io.emit('/', {
+      //       query: { register: 'periodical' },
+      //       body: {
+      //         'transformation': 'limit:30000'
+      //
+      //       }
+      //     })
+      //   }
+      // })
+    },
+
     destroy_pipelines: function () {
       debug('destroy_pipelines')
 
