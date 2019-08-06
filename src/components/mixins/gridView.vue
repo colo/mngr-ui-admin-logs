@@ -61,7 +61,7 @@
               <component
                 v-if="widget.component"
                 :is="resolveComponent(widget.component)"
-                v-bind="widget.options"
+                v-bind="widget.props"
                 v-dynamic-events="(widget.events) ? widget.events : {}"
               />
               <!-- v-dynamic-options="(widget.options) ? widget.options : {}" -->
@@ -81,7 +81,7 @@
            <component
              v-if="widget.component"
              :is="widget.component"
-             v-bind="widget.options"
+             v-bind="widget.props"
              v-dynamic-events="(widget.events) ? widget.events : {}"
            />
             <!-- v-dynamic-options="(widget.options) ? widget.options : {}" -->
@@ -187,35 +187,35 @@ export default {
       unbind: function (el, binding, vnode) {
         vnode.componentInstance.$off()
       }
-    },
-    DynamicOptions: {
-      bind: (el, binding, vnode) => {
-        // debug('DynamicOptions.bind', el, binding, vnode, this)
-        const allOptions = binding.value
-        Object.keys(allOptions).forEach((opt) => {
-          if (vnode.context[opt]) {
-            debug('DynamicOptions.bind', vnode, opt, vnode.context[opt])
-            Vue.set(vnode.componentInstance, opt, vnode.context[opt])
-          } else {
-            // Vue.set(vnode.componentInstance, opt, allOptions[opt])
-            vnode.componentInstance._props[opt] = allOptions[opt]
-            // vnode.componentInstance[opt](allOptions[opt])
-            // vnode.componentOptions.Ctor.extendOptions.props[opt] = allOptions[opt]
-          }
-          // register handler in the dynamic component
-          // vnode.componentInstance.$on(event, (eventData) => {
-          //   const targetEvent = allEvents[event]
-          //   vnode.context[targetEvent](eventData)
-          // })
-        })
-      },
-      // update: (el, binding, vnode) => {
-      //   debug('DynamicOptions.inserted', this)
-      // },
-      unbind: function (el, binding, vnode) {
-        // vnode.componentInstance.$off()
-      }
     }
+    // DynamicOptions: {
+    //   bind: (el, binding, vnode) => {
+    //     // debug('DynamicOptions.bind', el, binding, vnode, this)
+    //     const allOptions = binding.value
+    //     Object.keys(allOptions).forEach((opt) => {
+    //       if (vnode.context[opt]) {
+    //         debug('DynamicOptions.bind', vnode, opt, vnode.context[opt])
+    //         Vue.set(vnode.componentInstance, opt, vnode.context[opt])
+    //       } else {
+    //         // Vue.set(vnode.componentInstance, opt, allOptions[opt])
+    //         vnode.componentInstance._props[opt] = allOptions[opt]
+    //         // vnode.componentInstance[opt](allOptions[opt])
+    //         // vnode.componentOptions.Ctor.extendOptions.props[opt] = allOptions[opt]
+    //       }
+    //       // register handler in the dynamic component
+    //       // vnode.componentInstance.$on(event, (eventData) => {
+    //       //   const targetEvent = allEvents[event]
+    //       //   vnode.context[targetEvent](eventData)
+    //       // })
+    //     })
+    //   },
+    //   // update: (el, binding, vnode) => {
+    //   //   debug('DynamicOptions.inserted', this)
+    //   // },
+    //   unbind: function (el, binding, vnode) {
+    //     // vnode.componentInstance.$off()
+    //   }
+    // }
   },
 
   data: function () {

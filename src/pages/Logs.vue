@@ -125,7 +125,7 @@ export default {
       components = {
         'count': [{
           component: 'admin-lte-small-box',
-          options: {
+          props: {
             bg: 'bg-positive',
             inner: {
               header: 'Count',
@@ -134,14 +134,21 @@ export default {
             }, // this.counter.inner
             icon: 'fa fa-chart-bar'
           },
-          source: 'logs?register=periodical&transformation=limit%3A30000',
-          onData: function (val) {
-            this.options.inner.text = val.count
+          source: {
+            requests: {
+              once: [{
+                params: 'logs?register=periodical&transformation=limit%3A30000',
+                callback: function (val) {
+                  this.props.inner.text = val.count
+                }
+              }]
+            }
           }
+
         }],
         'range': [{
           component: 'admin-lte-small-box',
-          options: {
+          props: {
             bg: 'bg-info',
             inner: {
               header: 'Range',
@@ -150,14 +157,20 @@ export default {
             },
             icon: 'fa fa-calendar'
           },
-          source: 'logs?register=periodical&transformation=limit%3A30000',
-          onData: function (val) {
-            this.options.inner.text = val.range
+          source: {
+            requests: {
+              once: [{
+                params: 'logs?register=periodical&transformation=limit%3A30000',
+                callback: function (val) {
+                  this.props.inner.text = val.range
+                }
+              }]
+            }
           }
         }],
         'tags': [{
           component: 'admin-lte-small-box',
-          options: {
+          props: {
             bg: 'bg-info',
             inner: {
               header: 'Tags',
@@ -166,14 +179,20 @@ export default {
             },
             icon: 'fa fa-tags'
           },
-          source: 'logs?register=periodical&transformation=limit%3A30000',
-          onData: function (val) {
-            this.options.inner.text = val.tags
+          source: {
+            requests: {
+              once: [{
+                params: 'logs?register=periodical&transformation=limit%3A30000',
+                callback: function (val) {
+                  this.props.inner.text = val.tags
+                }
+              }]
+            }
           }
         }],
         'hosts': [{
           component: 'admin-lte-small-box',
-          options: {
+          props: {
             bg: 'bg-info',
             inner: {
               header: 'Hosts',
@@ -182,30 +201,52 @@ export default {
             },
             icon: 'fa fa-server'
           },
-          source: 'logs?register=periodical&transformation=limit%3A30000',
-          onData: function (val) {
-            this.options.inner.text = val.hosts
+          source: {
+            requests: {
+              once: [{
+                params: 'logs?register=periodical&transformation=limit%3A30000',
+                callback: function (val) {
+                  this.props.inner.text = val.hosts
+                }
+              }]
+            }
           }
         }],
         '6': [{
           component: 'MyRange',
-          options: {
+          props: {
             // range: this.$store.state[this.id + '_sources']['logs?register=periodical&transformation=limit%3A30000']['range']
             range: []
             // range: this.MyRange
             // ref: 'MyRange'
           },
-          // source: 'logs?register=periodical&transformation=limit%3A30000',
+          // source: {
+          //   path: 'logs',
+          //   params: { register: 'periodical', 'transformation': 'limit:30000' }
+          //   // body: {
+          //   //   'transformation': 'limit:30000'
+          //   //
+          //   // }
+          // },
+          // onData: function (val) {
+          //   this.props.range = val.range
+          // }
           source: {
-            path: 'logs',
-            query: { register: 'periodical', 'transformation': 'limit:30000' }
-            // body: {
-            //   'transformation': 'limit:30000'
-            //
-            // }
-          },
-          onData: function (val) {
-            this.options.range = val.range
+            requests: {
+              once: [{
+                params: {
+                  path: 'logs',
+                  query: { register: 'periodical', 'transformation': 'limit:30000' }
+                  // body: {
+                  //   'transformation': 'limit:30000'
+                  //
+                  // }
+                },
+                callback: function (val) {
+                  this.props.range = val.range
+                }
+              }]
+            }
           }
         }],
         '7': [{
@@ -232,7 +273,7 @@ export default {
         // '1': [{
         //   id: 0,
         //   component: 'admin-lte-box',
-        //   options: {
+        //   props: {
         //     type: 'box-success',
         //     title: 'MyBox',
         //     body: {
@@ -246,7 +287,7 @@ export default {
         //   {
         //     id: 2,
         //     component: 'admin-lte-small-box',
-        //     // options: {
+        //     // props: {
         //     //   bg: 'bg-primary'
         //     // },
         //     defaultSize: 2
@@ -257,7 +298,7 @@ export default {
         //   {
         //     component: 'q-btn',
         //     // defaultSize: 2,
-        //     options: {
+        //     props: {
         //       // round: true,
         //       label: 'edit/preview'
         //       // style: 'position: relative'
@@ -271,7 +312,7 @@ export default {
         //   {
         //     component: 'q-btn',
         //     // defaultSize: 2,
-        //     options: {
+        //     props: {
         //     // round: true,
         //       label: 'draggables'
         //       // style: 'position: relative'
@@ -362,8 +403,8 @@ export default {
 
       let pipeline_id = template.input[0].poll.id
       debug('LogsPipeline ', template.input[0].poll.conn[0])
-      template.input[0].poll.conn[0].requests = { once: [] }
-      template.input[0].poll.conn[0].requests.once = this.__components_sources_to_request(JSON.parse(JSON.stringify(this.components)))
+
+      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
 
       if (!this.$options.pipelines[pipeline_id]) {
         let pipe = new Pipeline(template)

@@ -74,13 +74,51 @@ export default {
   //   ])
   // }
   methods: {
-    __update_component_data: function (component, data) {
-      if (component.onData && typeof component.onData === 'function') {
-        debug('__update_component_data', component)
-        component.onData.attempt(data, component)
+    __update_component_data: function (component, key, data) {
+      debug('__update_component_data', component)
+      let callback = this.__get_source_callback_from_key(component.source, key)
+
+      debug('__update_component_data', callback)
+
+      if (callback && typeof callback === 'function') {
+        callback.attempt(data, component)
       }
     },
-    __source_to_string: function (query) {
+    __get_source_callback_from_key: function (source, key) {
+      let callback
+
+      for (const type in source) {
+        for (const req_type in source[type]) {
+          let reqs = source[type][req_type]
+          if (!Array.isArray(reqs)) reqs = [reqs]
+
+          for (let i = 0; i < reqs.length; i++) {
+            if (this.__query_to_key(reqs[i].params) === key) {
+              debug('__get_source_callback_from_key', reqs)
+              callback = reqs[i].callback
+            }
+          }
+        }
+      }
+
+      return callback
+    },
+    __source_to_keys: function (source) {
+      let keys = []
+      for (const type in source) {
+        for (const req_type in source[type]) {
+          let reqs = source[type][req_type]
+          if (!Array.isArray(reqs)) reqs = [reqs]
+
+          for (let i = 0; i < reqs.length; i++) {
+            keys.push(this.__query_to_key(reqs[i].params))
+          }
+        }
+      }
+
+      return keys
+    },
+    __query_to_key: function (query) {
       if (typeof query === 'string') {
         return query
       } else {
@@ -89,91 +127,7 @@ export default {
         return query.path + '?' + qs.stringify(_query)
       }
     },
-    __process_data: function (payload) {
-      debug('__process_data', payload)
-      // for (const key in payload.data) {
-      //   this.$store.commit(this.id + '_sources/append', { id: payload.id, key: key, data: payload.data[key] })
-      // }
-      if (this.store) {
-        this.$store.commit(this.id + '_sources/add', payload)
-      } else {
-        let key = payload.id
-        for (const prop in this.components) {
-          let components = this.components[prop]
-          if (Array.isArray(components)) {
-            for (const index in components) {
-              if (components[index].source && this.__source_to_string(components[index].source) === key) {
-                this.__update_component_data(components[index], payload.data)
-              }
-            }
-          } else {
-            if (components.source && this.__source_to_string(components.source) === key) {
-              this.__update_component_data(components, payload.data)
-            }
-          }
-        }
-      }
 
-      // if(payload.range === true)
-      // //console.log('recived doc via Event stats', payload)
-
-      // let type = (payload.tabular === true) ? 'tabular' : 'stat'
-      // let { type } = payload
-      //
-      // let init = (type === 'tabular') ? 'tabular_init' : 'stat_init'
-      // // let iterate = (type === 'tabulars') ? payload.stats : payload.stats.data
-      // let whitelist = (type === 'tabular') ? this.$options.tabular_whitelist : this.$options.stat_whitelist
-      // let blacklist = (type === 'tabular') ? this.$options.tabular_blacklist : this.$options.stat_blacklist
-
-      // let counter = 0
-      // if (payload[type]) {
-      //   if (Object.getLength(payload[type]) > 0) {
-      //     Object.each(payload[type], function (data, path) {
-      //       let new_path
-      //       let new_val
-      //       if (Array.isArray(data)) {
-      //         // if((whitelist && whitelist.test(path)) || (blacklist && !blacklist.test(path)))
-      //         // if (process.env.DEV) debug('__process_dashboard_data', payload.key + '_' + path)
-      //
-      //         if (this.__white_black_lists_filter(whitelist, blacklist, path)) {
-      //           this.$store.commit('dashboard_' + this.id + '/' + type + '_sources/add', { key: payload.key + '_' + path, value: data })
-      //         }
-      //       } else {
-      //         Object.each(data, function (value, key) {
-      //           if (Array.isArray(value)) {
-      //             // if((whitelist && whitelist.test(path+'.'+key)) || (blacklist && !blacklist.test(path+'.'+key)))
-      //             // if (process.env.DEV) debug('__process_dashboard_data', payload.key + '_' + path + '_' + key)
-      //
-      //             if (this.__white_black_lists_filter(whitelist, blacklist, path + '_' + key)) {
-      //               this.$store.commit('dashboard_' + this.id + '/' + type + '_sources/add', { key: payload.key + '_' + path + '_' + key, value: value })
-      //             }
-      //           } else {
-      //             // 3rd level, there is no need for more
-      //             Object.each(value, function (val, sub_key) {
-      //               // if (process.env.DEV) debug('__process_dashboard_data', payload.key + '_' + path + '_' + key + '_' + sub_key)
-      //
-      //               if (this.__white_black_lists_filter(whitelist, blacklist, path + '_' + key + '_' + sub_key)) {
-      //                 this.$store.commit('dashboard_' + this.id + '/' + type + '_sources/add', { key: payload.key + '_' + path + '_' + key + '_' + sub_key, value: val })
-      //               }
-      //             }.bind(this))
-      //           }
-      //         }.bind(this))
-      //       }
-      //
-      //       if (counter === Object.getLength(payload[type]) - 1) {
-      //         this.$set(this, init, true)
-      //         // this[init] = true
-      //         this.$emit(type + '_sources')
-      //       }
-      //
-      //       counter++
-      //     }.bind(this))
-      //   }
-      //   // else{
-      //   //   this.$set(this, init, true)
-      //   // }
-      // }
-    },
     __register_store_module: function (id, module) {
       debug('__register_store_module', id)
 
@@ -224,12 +178,43 @@ export default {
     **/
     create_pipelines: function (next) {
     },
-    __components_sources_to_request: function (_components) {
-      let requests = []
+    __process_data: function (payload) {
+      debug('__process_data', payload)
+      // for (const key in payload.data) {
+      //   this.$store.commit(this.id + '_sources/append', { id: payload.id, key: key, data: payload.data[key] })
+      // }
+      if (this.store) {
+        this.$store.commit(this.id + '_sources/add', payload)
+      } else {
+        let key = payload.id
+
+        for (const prop in this.components) {
+          let components = this.components[prop]
+          // if (!Array.isArray(components)) components = [components]
+
+          if (Array.isArray(components)) {
+            for (let index = 0; index < components.length; index++) {
+              if (
+                components[index].source &&
+                this.__source_to_keys(components[index].source).contains(key)
+              ) {
+                this.__update_component_data(components[index], key, payload.data)
+              }
+            }
+          } else {
+            if (components.source && this.__source_to_keys(components.source).contains(key)) {
+              this.__update_component_data(components, key, payload.data)
+            }
+          }
+        }
+      }
+    },
+    __components_sources_to_requests: function (_components) {
+      let requests = {}
       let sources = {}
 
       // let _components = JSON.parse(JSON.stringify(this.components))
-      debug('__components_sources_to_request', _components)
+      // debug('__components_sources_to_requests', _components)
       for (const key in _components) {
         let components = _components[key]
 
@@ -238,31 +223,49 @@ export default {
         }
 
         for (const index in components) {
-          if (components[index].source) {
-            let key_source = components[index].source
-            let source = components[index].source
-            if (typeof source === 'string') {
-              source = { path: source.substring(0, source.indexOf('?')), query: qs.parse(source.substring(source.indexOf('?') + 1)) }
-            } else {
-              key_source = key_source.path + '?' + qs.stringify(Object.merge(key_source.query, key_source.body))
-            }
+          if (components[index].source && components[index].source.requests) {
+            let _requests = components[index].source.requests
 
-            sources[key_source] = source
+            for (const req_type in _requests) {
+              let reqs = _requests[req_type]
+              if (!Array.isArray(reqs)) { reqs = [reqs] }
+
+              for (let j = 0; j < reqs.length; j++) {
+                let key_source = reqs[j].params
+                let source = reqs[j].params
+
+                debug('__components_sources_to_requests', j, reqs, typeof (source))
+
+                if (typeof source === 'string') {
+                  source = { path: source.substring(0, source.indexOf('?')), query: qs.parse(source.substring(source.indexOf('?') + 1)) }
+                } else {
+                  key_source = key_source.path + '?' + qs.stringify(Object.merge(key_source.params, key_source.body))
+                }
+
+                if (!sources[req_type]) sources[req_type] = {}
+
+                sources[req_type][key_source] = source
+              }
+            }
           }
         }
       }
 
-      // debug('__components_sources_to_request', sources)
-      for (const key in sources) {
-        requests.push({
-          init: function (req, next, app) {
-            debug('INIT', app)
-            app.io.emit('/', { query: sources[key].query })
-          }
-        })
+      // debug('__components_sources_to_requests', sources)
+      for (const req_type in sources) {
+        for (const key in sources[req_type]) {
+          if (!requests[req_type]) requests[req_type] = []
+
+          requests[req_type].push({
+            init: function (req, next, app) {
+              debug('INIT', app)
+              app.io.emit('/', { query: sources[req_type][key].query })
+            }
+          })
+        }
       }
 
-      debug('__components_sources_to_request', requests)
+      debug('__components_sources_to_requests', requests)
       return requests
       // template.input[0].poll.conn[0].requests.once.push({
       //   init: function (req, next, app) {
