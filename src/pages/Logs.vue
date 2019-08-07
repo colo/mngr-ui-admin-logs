@@ -14,6 +14,7 @@ import LogsPipeline from '@libs/pipelines/logs'
 
 // import { dom } from 'quasar'
 // const { height, width } = dom
+let moment = require('moment')
 
 export default {
   mixins: [AdminLteMixin, GridViewMixin, DataSourcesMixin],
@@ -254,7 +255,53 @@ export default {
         }],
 
         '8': [{
-          component: 'MyTable'
+          component: 'MyTable',
+          props: {
+            data: []
+          },
+          source: {
+            requests: {
+              once: [{
+                params: {
+                  path: 'logs',
+                  query: {
+                    'q': [
+                      { 'data': ['log'] },
+                      { 'metadata': ['host', 'tag', 'timestamp'] }
+                    ],
+                    'transformation': 'slice:0:9'
+                  }
+                  // body: {
+                  //   'transformation': 'limit:30000'
+                  //
+                  // }
+                },
+                callback: function (val) {
+                  debug('MyTable', val)
+                  if (!Array.isArray(val)) val = [val]
+
+                  val.sort(function (a, b) {
+                    if (a.metadata.timestamp > b.metadata.timestamp) {
+                      return -1
+                    }
+                    if (a.metadata.timestamp < b.metadata.timestamp) {
+                      return 1
+                    }
+                    // a must be equal to b
+                    return 0
+                  })
+
+                  for (let i = 0; i < val.length; i++) {
+                    let row = Object.merge(val[i].data, val[i].metadata)
+                    row.date = moment(row.timestamp).fromNow()
+
+                    debug('MyTable', row)
+                    this.props.data.push(row)
+                  }
+                }
+              }]
+            }
+          }
         }]
         // '9': [{
         //   component: 'MyRange'

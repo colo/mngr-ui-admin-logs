@@ -187,6 +187,8 @@ export default {
         this.$store.commit(this.id + '_sources/add', payload)
       } else {
         let key = payload.id
+        // convert to array of array so it can be pass as parameter
+        if (Array.isArray(payload.data)) payload.data = [payload.data]
 
         for (const prop in this.components) {
           let components = this.components[prop]
