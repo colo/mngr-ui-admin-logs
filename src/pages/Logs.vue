@@ -269,7 +269,10 @@ export default {
                       { 'data': ['log'] },
                       { 'metadata': ['host', 'tag', 'timestamp'] }
                     ],
-                    'transformation': 'slice:0:9'
+                    'transformation': [
+                      { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+                      'slice:0:9'
+                    ]
                   }
                   // body: {
                   //   'transformation': 'limit:30000'

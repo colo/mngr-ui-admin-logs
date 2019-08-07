@@ -56,7 +56,7 @@ export default {
           field: 'log',
           // format: val => `${val}`,
           format: function (val) {
-            if (val.length > 200) { return val.substring(0, 196) + '...' }
+            if (val.length >= 100) { return val.substring(0, 96) + '...' }
 
             return val
           },
