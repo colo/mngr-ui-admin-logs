@@ -233,16 +233,20 @@ export default {
               if (!Array.isArray(reqs)) { reqs = [reqs] }
 
               for (let j = 0; j < reqs.length; j++) {
-                let key_source = reqs[j].params
+                let key_source = Object.clone(reqs[j].params)
                 let source = reqs[j].params
 
-                debug('__components_sources_to_requests', j, reqs, typeof (source))
+                // debug('__components_sources_to_requests', j, reqs, typeof (source))
+
+                // debug('__components_sources_to_requests', req_type, key_source)
 
                 if (typeof source === 'string') {
                   source = { path: source.substring(0, source.indexOf('?')), query: qs.parse(source.substring(source.indexOf('?') + 1)) }
                 } else {
-                  key_source = key_source.path + '?' + qs.stringify(Object.merge(key_source.params, key_source.body))
+                  key_source = key_source.path + '?' + qs.stringify(Object.merge(key_source.query, key_source.body))
                 }
+
+                debug('__components_sources_to_requests', req_type, key_source)
 
                 if (!sources[req_type]) sources[req_type] = {}
 
@@ -253,14 +257,14 @@ export default {
         }
       }
 
-      // debug('__components_sources_to_requests', sources)
+      debug('__components_sources_to_requests', sources)
       for (const req_type in sources) {
         for (const key in sources[req_type]) {
           if (!requests[req_type]) requests[req_type] = []
 
           requests[req_type].push({
             init: function (req, next, app) {
-              debug('INIT', app)
+              // debug('INIT', app)
               app.io.emit('/', { query: sources[req_type][key].query })
             }
           })

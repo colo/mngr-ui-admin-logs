@@ -138,7 +138,17 @@ export default {
           source: {
             requests: {
               once: [{
-                params: 'logs?register=periodical&transformation=limit%3A30000',
+                params: {
+                  path: 'logs',
+                  query: {
+                    register: 'periodical',
+                    'transformation': [
+                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                      'limit:30000'
+                    ]
+                  }
+
+                },
                 callback: function (val) {
                   this.props.inner.text = val.count
                 }
@@ -161,7 +171,17 @@ export default {
           source: {
             requests: {
               once: [{
-                params: 'logs?register=periodical&transformation=limit%3A30000',
+                params: {
+                  path: 'logs',
+                  query: {
+                    register: 'periodical',
+                    'transformation': [
+                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                      'limit:30000'
+                    ]
+                  }
+
+                },
                 callback: function (val) {
                   this.props.inner.text = val.range
                 }
@@ -183,7 +203,17 @@ export default {
           source: {
             requests: {
               once: [{
-                params: 'logs?register=periodical&transformation=limit%3A30000',
+                params: {
+                  path: 'logs',
+                  query: {
+                    register: 'periodical',
+                    'transformation': [
+                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                      'limit:30000'
+                    ]
+                  }
+
+                },
                 callback: function (val) {
                   this.props.inner.text = val.tags
                 }
@@ -205,7 +235,17 @@ export default {
           source: {
             requests: {
               once: [{
-                params: 'logs?register=periodical&transformation=limit%3A30000',
+                params: {
+                  path: 'logs',
+                  query: {
+                    register: 'periodical',
+                    'transformation': [
+                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                      'limit:30000'
+                    ]
+                  }
+
+                },
                 callback: function (val) {
                   this.props.inner.text = val.hosts
                 }
@@ -221,27 +261,20 @@ export default {
             // range: this.MyRange
             // ref: 'MyRange'
           },
-          // source: {
-          //   path: 'logs',
-          //   params: { register: 'periodical', 'transformation': 'limit:30000' }
-          //   // body: {
-          //   //   'transformation': 'limit:30000'
-          //   //
-          //   // }
-          // },
-          // onData: function (val) {
-          //   this.props.range = val.range
-          // }
+
           source: {
             requests: {
               once: [{
                 params: {
                   path: 'logs',
-                  query: { register: 'periodical', 'transformation': 'limit:30000' }
-                  // body: {
-                  //   'transformation': 'limit:30000'
-                  //
-                  // }
+                  query: {
+                    register: 'periodical',
+                    'transformation': [
+                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                      'limit:30000'
+                    ]
+                  }
+
                 },
                 callback: function (val) {
                   this.props.range = val.range
@@ -261,48 +294,94 @@ export default {
           },
           source: {
             requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    'q': [
-                      { 'data': ['log'] },
-                      { 'metadata': ['host', 'tag', 'timestamp'] }
-                    ],
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-                      'slice:0:9'
-                    ]
-                  }
+              once: [
+                // {
+                //   params: {
+                //     path: 'logs',
+                //     query: {
+                //       // register: 'periodical',
+                //       'q': [
+                //         { 'data': ['log'] },
+                //         { 'metadata': ['host', 'tag', 'timestamp'] }
+                //       ],
+                //       'transformation': [
+                //         { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+                //         'slice:0:9'
+                //       ]
+                //     }
+                //     // body: {
+                //     //   'transformation': 'limit:30000'
+                //     //
+                //     // }
+                //   },
+                //   callback: function (val) {
+                //     debug('MyTable', val)
+                //     if (!Array.isArray(val)) val = [val]
+                //
+                //     val.sort(function (a, b) {
+                //       if (a.metadata.timestamp > b.metadata.timestamp) {
+                //         return -1
+                //       }
+                //       if (a.metadata.timestamp < b.metadata.timestamp) {
+                //         return 1
+                //       }
+                //       // a must be equal to b
+                //       return 0
+                //     })
+                //
+                //     for (let i = 0; i < val.length; i++) {
+                //       let row = Object.merge(val[i].data, val[i].metadata)
+                //       row.date = moment(row.timestamp).fromNow()
+                //
+                //       debug('MyTable', row)
+                //       this.props.data.push(row)
+                //     }
+                //   }
+                // },
+                {
+                  params: {
+                    path: 'logs',
+                    query: {
+                      register: 'changes',
+                      'q': [
+                        { 'data': ['log'] },
+                        { 'metadata': ['host', 'tag', 'timestamp'] }
+                      ]
+                      // 'transformation': [
+                      //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+                      //   'slice:0:9'
+                      // ]
+                    }
                   // body: {
                   //   'transformation': 'limit:30000'
                   //
                   // }
-                },
-                callback: function (val) {
-                  debug('MyTable', val)
-                  if (!Array.isArray(val)) val = [val]
+                  },
+                  callback: function (val) {
+                    debug('MyTable changes', val)
+                    if (!Array.isArray(val)) val = [val]
 
-                  val.sort(function (a, b) {
-                    if (a.metadata.timestamp > b.metadata.timestamp) {
-                      return -1
+                    val.sort(function (a, b) {
+                      if (a.metadata.timestamp > b.metadata.timestamp) {
+                        return -1
+                      }
+                      if (a.metadata.timestamp < b.metadata.timestamp) {
+                        return 1
+                      }
+                      // a must be equal to b
+                      return 0
+                    })
+
+                    for (let i = 0; i < val.length; i++) {
+                      let row = Object.merge(val[i].data, val[i].metadata)
+                      row.date = moment(row.timestamp).fromNow()
+
+                      debug('MyTable changes', row)
+                      this.props.data.push(row)
                     }
-                    if (a.metadata.timestamp < b.metadata.timestamp) {
-                      return 1
-                    }
-                    // a must be equal to b
-                    return 0
-                  })
-
-                  for (let i = 0; i < val.length; i++) {
-                    let row = Object.merge(val[i].data, val[i].metadata)
-                    row.date = moment(row.timestamp).fromNow()
-
-                    debug('MyTable', row)
-                    this.props.data.push(row)
                   }
                 }
-              }]
+              ]
             }
           }
         }]
@@ -452,9 +531,10 @@ export default {
       let template = Object.clone(LogsPipeline)
 
       let pipeline_id = template.input[0].poll.id
-      debug('LogsPipeline ', template.input[0].poll.conn[0])
+      // debug('LogsPipeline ', template.input[0].poll.conn[0])
 
       template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+      debug('LogsPipeline ', template.input[0].poll.conn[0].requests, JSON.parse(JSON.stringify(this.components)))
 
       if (!this.$options.pipelines[pipeline_id]) {
         let pipe = new Pipeline(template)
