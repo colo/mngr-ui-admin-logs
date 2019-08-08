@@ -167,7 +167,10 @@ export default new Class({
 
 
     this.addEvent('onConnect', function(){
-      debug('initialize socket.onConnect', this.io.id)
+      debug('initialize socket.onConnect', this.options.requests)
+      // // setTimeout(this.fireEvent.bind(this), 1000, 'onResume');
+      setTimeout(this.fireEvent.bind(this), 1000, 'onOnce');
+
       // this.io.emit('on', 'logs')
       // this.io.emit('on', 'changes', {
       //   params: { prop: undefined },
@@ -253,7 +256,7 @@ export default new Class({
       //   }
       // })
 
-    })
+    }.bind(this))
 
     this.addEvent('onExit', function(){
       debug('onExit')

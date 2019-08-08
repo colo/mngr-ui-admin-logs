@@ -265,10 +265,18 @@ export default {
           let fun = {}
           fun[key] = function (req, next, app) {
             // debug('INIT', app)
-            debug('__components_sources_to_requests', query)
             app.io.emit('/', query)
+            debug('FUNC EMIT', query)
           }
           requests[req_type].push(fun)
+
+          // requests[req_type].push({
+          //   init: function (req, next, app) {
+          //   // debug('INIT', app)
+          //     app.io.emit('/', query)
+          //     debug('FUNC EMIT', query)
+          //   }
+          // })
         }
       }
 

@@ -21,6 +21,7 @@ export default {
   input: [
     {
       poll: {
+        suspended: true,
         id: 'input.logs',
         conn: [
 
