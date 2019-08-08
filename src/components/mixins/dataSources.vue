@@ -261,17 +261,18 @@ export default {
       for (const req_type in sources) {
         for (const key in sources[req_type]) {
           if (!requests[req_type]) requests[req_type] = []
-
-          requests[req_type].push({
-            init: function (req, next, app) {
-              // debug('INIT', app)
-              app.io.emit('/', { query: sources[req_type][key].query })
-            }
-          })
+          let query = Object.clone({ query: sources[req_type][key].query })
+          let fun = {}
+          fun[key] = function (req, next, app) {
+            // debug('INIT', app)
+            debug('__components_sources_to_requests', query)
+            app.io.emit('/', query)
+          }
+          requests[req_type].push(fun)
         }
       }
 
-      debug('__components_sources_to_requests', requests)
+      debug('__components_sources_to_requests REQUEST', requests)
       return requests
       // template.input[0].poll.conn[0].requests.once.push({
       //   init: function (req, next, app) {

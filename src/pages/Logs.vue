@@ -134,27 +134,27 @@ export default {
               // text: this.logs.count
             }, // this.counter.inner
             icon: 'fa fa-chart-bar'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.count
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.count
+          //       }
+          //     }]
+          //   }
+          // }
 
         }],
         'range': [{
@@ -167,27 +167,27 @@ export default {
               text: ''
             },
             icon: 'fa fa-calendar'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.range
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.range
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         'tags': [{
           component: 'admin-lte-small-box',
@@ -199,27 +199,27 @@ export default {
               text: ''
             },
             icon: 'fa fa-tags'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.tags
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.tags
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         'hosts': [{
           component: 'admin-lte-small-box',
@@ -231,27 +231,27 @@ export default {
               text: ''
             },
             icon: 'fa fa-server'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.hosts
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.hosts
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         '6': [{
           component: 'MyRange',
@@ -260,28 +260,28 @@ export default {
             range: []
             // range: this.MyRange
             // ref: 'MyRange'
-          },
-
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.range = val.range
-                }
-              }]
-            }
           }
+
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.range = val.range
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         '7': [{
           component: 'MyChart'
@@ -295,49 +295,49 @@ export default {
           source: {
             requests: {
               once: [
-                // {
-                //   params: {
-                //     path: 'logs',
-                //     query: {
-                //       // register: 'periodical',
-                //       'q': [
-                //         { 'data': ['log'] },
-                //         { 'metadata': ['host', 'tag', 'timestamp'] }
-                //       ],
-                //       'transformation': [
-                //         { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-                //         'slice:0:9'
-                //       ]
-                //     }
-                //     // body: {
-                //     //   'transformation': 'limit:30000'
-                //     //
-                //     // }
-                //   },
-                //   callback: function (val) {
-                //     debug('MyTable', val)
-                //     if (!Array.isArray(val)) val = [val]
-                //
-                //     val.sort(function (a, b) {
-                //       if (a.metadata.timestamp > b.metadata.timestamp) {
-                //         return -1
-                //       }
-                //       if (a.metadata.timestamp < b.metadata.timestamp) {
-                //         return 1
-                //       }
-                //       // a must be equal to b
-                //       return 0
-                //     })
-                //
-                //     for (let i = 0; i < val.length; i++) {
-                //       let row = Object.merge(val[i].data, val[i].metadata)
-                //       row.date = moment(row.timestamp).fromNow()
-                //
-                //       debug('MyTable', row)
-                //       this.props.data.push(row)
-                //     }
-                //   }
-                // },
+                {
+                  params: {
+                    path: 'logs',
+                    query: {
+                      // register: 'periodical',
+                      'q': [
+                        { 'data': ['log'] },
+                        { 'metadata': ['host', 'tag', 'timestamp'] }
+                      ],
+                      'transformation': [
+                        { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+                        'slice:0:9'
+                      ]
+                    }
+                    // body: {
+                    //   'transformation': 'limit:30000'
+                    //
+                    // }
+                  },
+                  callback: function (val) {
+                    debug('MyTable', val)
+                    if (!Array.isArray(val)) val = [val]
+
+                    val.sort(function (a, b) {
+                      if (a.metadata.timestamp > b.metadata.timestamp) {
+                        return -1
+                      }
+                      if (a.metadata.timestamp < b.metadata.timestamp) {
+                        return 1
+                      }
+                      // a must be equal to b
+                      return 0
+                    })
+
+                    for (let i = 0; i < val.length; i++) {
+                      let row = Object.merge(val[i].data, val[i].metadata)
+                      row.date = moment(row.timestamp).fromNow()
+
+                      debug('MyTable', row)
+                      this.props.data.push(row)
+                    }
+                  }
+                },
                 {
                   params: {
                     path: 'logs',
