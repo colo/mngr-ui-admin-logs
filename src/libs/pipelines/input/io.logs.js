@@ -31,9 +31,18 @@ export default new Class({
 
 
   	requests : {
-      once: [
-
-			],
+      // once: [{
+      //   // init: function (req, next, app) {
+      //   //   debug('once init', app.options.queries.once)
+      //   //   if(app.options.queries, app.options.queries.once)
+      //   //     Array.each(app.options.queries.once, function(query, index){
+      //   //       debug('once init query', query, app.io.emit)
+      //   //
+      //   //       setTimeout(app.io.emit('/', Object.clone(query)), 1000);
+      //   //       // app.io.emit('/', query)
+      //   //     })
+      //   // }
+			// }],
 			periodical: [
 
 			],
@@ -169,7 +178,20 @@ export default new Class({
     this.addEvent('onConnect', function(){
       debug('initialize socket.onConnect', this.options.requests)
       // // setTimeout(this.fireEvent.bind(this), 1000, 'onResume');
-      setTimeout(this.fireEvent.bind(this), 1000, 'onOnce');
+
+      // setTimeout(this.fireEvent.bind(this), 1000, 'onOnce');
+      //
+      // setTimeout(function(){
+      //   if(this.options.queries, this.options.queries.once)
+      //     Array.each(this.options.queries.once, function(query, index){
+      //       debug('once init query', query)
+      //
+      //       // setTimeout(this.io.emit('/', Object.clone(query)), 1000);
+      //       if(index === 0)
+      //       this.io.emit('/', query)
+      //     }.bind(this))
+      //
+      // }.bind(this), 1000)
 
       // this.io.emit('on', 'logs')
       // this.io.emit('on', 'changes', {
@@ -242,12 +264,6 @@ export default new Class({
       //   }
       // })
 
-      // this.io.emit('on', 'periodical', {
-      //   // range: "posix 1557135759000-1557136059000/*",
-      //   body: {
-      //      "aggregation": "count"
-      //   }
-      // })
       // this.io.emit('/', {
       //   query: {register: 'periodical'},
       //   body: {
@@ -255,6 +271,56 @@ export default new Class({
       //
       //   }
       // })
+      
+      /**
+      * test queries
+      **/
+
+      // this.io.emit('/', {
+      //   query: {
+      //     // register: 'periodical',
+      //     'q': [
+      //       { 'data': ['log'] },
+      //       { 'metadata': ['host', 'tag', 'timestamp'] }
+      //     ],
+      //     'transformation': [
+      //       { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+      //       'slice:0:9'
+      //     ]
+      //   }
+      // })
+
+      this.io.emit('/', {
+        query: {
+          register: 'changes',
+          'q': [
+            { 'data': ['log'] },
+            { 'metadata': ['host', 'tag', 'timestamp'] }
+          ]
+          // 'transformation': [
+          //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+          //   'slice:0:9'
+          // ]
+        }
+
+      })
+
+      this.io.emit('/', {
+        query: {
+          register: 'periodical',
+          'transformation': [
+            { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+            'limit:30000'
+          ]
+        }
+
+      })
+
+      /**
+      * test queries
+      **/
+
+
 
     }.bind(this))
 

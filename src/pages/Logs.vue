@@ -290,99 +290,99 @@ export default {
           component: 'MyTable',
           props: {
             data: []
+          },
+          source: {
+            requests: {
+              once: [
+                {
+                  params: {
+                    path: 'logs',
+                    query: {
+                      // register: 'periodical',
+                      'q': [
+                        { 'data': ['log'] },
+                        { 'metadata': ['host', 'tag', 'timestamp'] }
+                      ],
+                      'transformation': [
+                        { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+                        'slice:0:9'
+                      ]
+                    }
+                    // body: {
+                    //   'transformation': 'limit:30000'
+                    //
+                    // }
+                  },
+                  callback: function (val) {
+                    debug('MyTable', val)
+                    if (!Array.isArray(val)) val = [val]
+
+                    val.sort(function (a, b) {
+                      if (a.metadata.timestamp > b.metadata.timestamp) {
+                        return -1
+                      }
+                      if (a.metadata.timestamp < b.metadata.timestamp) {
+                        return 1
+                      }
+                      // a must be equal to b
+                      return 0
+                    })
+
+                    for (let i = 0; i < val.length; i++) {
+                      let row = Object.merge(val[i].data, val[i].metadata)
+                      row.date = moment(row.timestamp).fromNow()
+
+                      debug('MyTable', row)
+                      this.props.data.push(row)
+                    }
+                  }
+                },
+                {
+                  params: {
+                    path: 'logs',
+                    query: {
+                      register: 'changes',
+                      'q': [
+                        { 'data': ['log'] },
+                        { 'metadata': ['host', 'tag', 'timestamp'] }
+                      ]
+                      // 'transformation': [
+                      //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+                      //   'slice:0:9'
+                      // ]
+                    }
+                  // body: {
+                  //   'transformation': 'limit:30000'
+                  //
+                  // }
+                  },
+                  callback: function (val) {
+                    debug('MyTable changes', val)
+                    if (!Array.isArray(val)) val = [val]
+
+                    val.sort(function (a, b) {
+                      if (a.metadata.timestamp > b.metadata.timestamp) {
+                        return -1
+                      }
+                      if (a.metadata.timestamp < b.metadata.timestamp) {
+                        return 1
+                      }
+                      // a must be equal to b
+                      return 0
+                    })
+
+                    for (let i = 0; i < val.length; i++) {
+                      let row = Object.merge(val[i].data, val[i].metadata)
+                      row.date = moment(row.timestamp).fromNow()
+
+                      debug('MyTable changes', row)
+                      this.props.data.push(row)
+                    }
+                  }
+                }
+              ]
+            }
           }
-          // source: {
-          //   requests: {
-          //     once: [
-          //       {
-          //         params: {
-          //           path: 'logs',
-          //           query: {
-          //             // register: 'periodical',
-          //             'q': [
-          //               { 'data': ['log'] },
-          //               { 'metadata': ['host', 'tag', 'timestamp'] }
-          //             ],
-          //             'transformation': [
-          //               { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-          //               'slice:0:9'
-          //             ]
-          //           }
-          //           // body: {
-          //           //   'transformation': 'limit:30000'
-          //           //
-          //           // }
-          //         },
-          //         callback: function (val) {
-          //           debug('MyTable', val)
-          //           if (!Array.isArray(val)) val = [val]
-          //
-          //           val.sort(function (a, b) {
-          //             if (a.metadata.timestamp > b.metadata.timestamp) {
-          //               return -1
-          //             }
-          //             if (a.metadata.timestamp < b.metadata.timestamp) {
-          //               return 1
-          //             }
-          //             // a must be equal to b
-          //             return 0
-          //           })
-          //
-          //           for (let i = 0; i < val.length; i++) {
-          //             let row = Object.merge(val[i].data, val[i].metadata)
-          //             row.date = moment(row.timestamp).fromNow()
-          //
-          //             debug('MyTable', row)
-          //             this.props.data.push(row)
-          //           }
-          //         }
-          //       }
-          //       // {
-          //       //   params: {
-          //       //     path: 'logs',
-          //       //     query: {
-          //       //       register: 'changes',
-          //       //       'q': [
-          //       //         { 'data': ['log'] },
-          //       //         { 'metadata': ['host', 'tag', 'timestamp'] }
-          //       //       ]
-          //       //       // 'transformation': [
-          //       //       //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-          //       //       //   'slice:0:9'
-          //       //       // ]
-          //       //     }
-          //       //   // body: {
-          //       //   //   'transformation': 'limit:30000'
-          //       //   //
-          //       //   // }
-          //       //   },
-          //       //   callback: function (val) {
-          //       //     debug('MyTable changes', val)
-          //       //     if (!Array.isArray(val)) val = [val]
-          //       //
-          //       //     val.sort(function (a, b) {
-          //       //       if (a.metadata.timestamp > b.metadata.timestamp) {
-          //       //         return -1
-          //       //       }
-          //       //       if (a.metadata.timestamp < b.metadata.timestamp) {
-          //       //         return 1
-          //       //       }
-          //       //       // a must be equal to b
-          //       //       return 0
-          //       //     })
-          //       //
-          //       //     for (let i = 0; i < val.length; i++) {
-          //       //       let row = Object.merge(val[i].data, val[i].metadata)
-          //       //       row.date = moment(row.timestamp).fromNow()
-          //       //
-          //       //       debug('MyTable changes', row)
-          //       //       this.props.data.push(row)
-          //       //     }
-          //       //   }
-          //       // }
-          //     ]
-          //   }
-          // }
         }]
         // '9': [{
         //   component: 'MyRange'
@@ -532,8 +532,10 @@ export default {
       let pipeline_id = template.input[0].poll.id
       // debug('LogsPipeline ', template.input[0].poll.conn[0])
 
-      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
-      debug('LogsPipeline ', template.input[0].poll.conn[0].requests)
+      // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+      template.input[0].poll.conn[0].queries = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+
+      // debug('LogsPipeline ', template.input[0].poll.conn[0].requests)
 
       // if (!this.$options.pipelines[pipeline_id]) {
       let pipe = new Pipeline(template)

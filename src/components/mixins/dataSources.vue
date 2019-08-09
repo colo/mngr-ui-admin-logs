@@ -259,25 +259,47 @@ export default {
 
       debug('__components_sources_to_requests', sources)
       for (const req_type in sources) {
-        for (const key in sources[req_type]) {
-          if (!requests[req_type]) requests[req_type] = []
-          let query = Object.clone({ query: sources[req_type][key].query })
-          let fun = {}
-          fun[key] = function (req, next, app) {
-            // debug('INIT', app)
-            app.io.emit('/', query)
-            debug('FUNC EMIT', query)
-          }
-          requests[req_type].push(fun)
+        if (!requests[req_type]) requests[req_type] = []
 
-          // requests[req_type].push({
-          //   init: function (req, next, app) {
-          //   // debug('INIT', app)
-          //     app.io.emit('/', query)
-          //     debug('FUNC EMIT', query)
-          //   }
-          // })
+        // for (const key in sources[req_type]) {
+        //   let query = Object.clone({ query: sources[req_type][key].query })
+        //
+        //   requests[req_type].push({
+        //     init: function (req, next, app) {
+        //     // debug('INIT', app)
+        //       app.io.emit('/', query)
+        //       debug('FUNC EMIT', query, next)
+        //
+        //       next()
+        //     }
+        //   })
+        // }
+
+        for (const key in sources[req_type]) {
+          let query = Object.clone({ query: sources[req_type][key].query })
+          requests[req_type].push(query)
         }
+
+        // let fun = {}
+        // fun[req_type] = function (req, next, app) {
+        //   for (const key in sources[req_type]) {
+        //     let query = Object.clone({ query: sources[req_type][key].query })
+        //
+        //     // app.io.emit('/', query)
+        //     app.io.emit(['/', query])
+        //     debug('FUNC EMIT', query, app.)
+        //
+        //     // requests[req_type].push({
+        //     //   init: function (req, next, app) {
+        //     //   // debug('INIT', app)
+        //     //     app.io.emit('/', query)
+        //     //     debug('FUNC EMIT', query)
+        //     //   }
+        //     // })
+        //   }
+        // }
+
+        // requests[req_type].push(fun)
       }
 
       debug('__components_sources_to_requests REQUEST', requests)
