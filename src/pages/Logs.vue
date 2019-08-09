@@ -305,7 +305,7 @@ export default {
                       ],
                       'transformation': [
                         { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-                        'slice:0:9'
+                        'slice:0:10'
                       ]
                     }
                     // body: {
@@ -532,8 +532,8 @@ export default {
       let pipeline_id = template.input[0].poll.id
       // debug('LogsPipeline ', template.input[0].poll.conn[0])
 
-      // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
-      template.input[0].poll.conn[0].queries = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+      // template.input[0].poll.conn[0].queries = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
 
       // debug('LogsPipeline ', template.input[0].poll.conn[0].requests)
 

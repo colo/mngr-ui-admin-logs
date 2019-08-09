@@ -31,6 +31,7 @@ export default new Class({
 
 
   	requests : {
+      once: [],
       // once: [{
       //   // init: function (req, next, app) {
       //   //   debug('once init', app.options.queries.once)
@@ -177,7 +178,7 @@ export default new Class({
 
     this.addEvent('onConnect', function(){
       debug('initialize socket.onConnect', this.options.requests)
-      // // setTimeout(this.fireEvent.bind(this), 1000, 'onResume');
+      // setTimeout(this.fireEvent.bind(this), 1000, 'onResume');
 
       // setTimeout(this.fireEvent.bind(this), 1000, 'onOnce');
       //
@@ -271,13 +272,13 @@ export default new Class({
       //
       //   }
       // })
-      
+
       /**
       * test queries
       **/
 
       // this.io.emit('/', {
-      //   query: {
+      //   body: {
       //     // register: 'periodical',
       //     'q': [
       //       { 'data': ['log'] },
@@ -289,32 +290,43 @@ export default new Class({
       //     ]
       //   }
       // })
+      // this.io.emit('/', {
+      //   body: {
+      //     // register: 'periodical',
+      //     'q': [
+      //       { 'data': ['log'] },
+      //       { 'metadata': ['host', 'tag', 'timestamp'] }
+      //     ],
+      //     'transformation': 'slice:0:9'
+      //   }
+      // })
 
-      this.io.emit('/', {
-        query: {
-          register: 'changes',
-          'q': [
-            { 'data': ['log'] },
-            { 'metadata': ['host', 'tag', 'timestamp'] }
-          ]
-          // 'transformation': [
-          //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-          //   'slice:0:9'
-          // ]
-        }
-
-      })
-
-      this.io.emit('/', {
-        query: {
-          register: 'periodical',
-          'transformation': [
-            { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-            'limit:30000'
-          ]
-        }
-
-      })
+      // this.io.emit('/', {
+      //   query: {
+      //     register: 'changes',
+      //     'q': [
+      //       { 'data': ['log'] },
+      //       { 'metadata': ['host', 'tag', 'timestamp'] }
+      //     ]
+      //     // 'transformation': [
+      //     //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+      //     //   'slice:0:9'
+      //     // ]
+      //   }
+      //
+      // })
+      //
+      //
+      // this.io.emit('/', {
+      //   query: {
+      //     register: 'periodical',
+      //     'transformation': [
+      //       { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+      //       'limit:30000'
+      //     ]
+      //   }
+      //
+      // })
 
       /**
       * test queries

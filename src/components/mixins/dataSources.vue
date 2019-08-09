@@ -261,24 +261,24 @@ export default {
       for (const req_type in sources) {
         if (!requests[req_type]) requests[req_type] = []
 
-        // for (const key in sources[req_type]) {
-        //   let query = Object.clone({ query: sources[req_type][key].query })
-        //
-        //   requests[req_type].push({
-        //     init: function (req, next, app) {
-        //     // debug('INIT', app)
-        //       app.io.emit('/', query)
-        //       debug('FUNC EMIT', query, next)
-        //
-        //       next()
-        //     }
-        //   })
-        // }
-
         for (const key in sources[req_type]) {
           let query = Object.clone({ query: sources[req_type][key].query })
-          requests[req_type].push(query)
+
+          requests[req_type].push({
+            init: function (req, next, app) {
+            // debug('INIT', app)
+              app.io.emit('/', query)
+              debug('FUNC EMIT', query, next)
+
+              // next()
+            }
+          })
         }
+
+        // for (const key in sources[req_type]) {
+        //   let query = Object.clone({ query: sources[req_type][key].query })
+        //   requests[req_type].push(query)
+        // }
 
         // let fun = {}
         // fun[req_type] = function (req, next, app) {
