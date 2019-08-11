@@ -38,7 +38,7 @@ export default {
         connect_retry_count: -1,
         connect_retry_periodical: 1000,
         requests: {
-          periodical: 1000
+          periodical: 5000
         }
       }
     }
@@ -47,7 +47,11 @@ export default {
   filters: [
     function (doc, opts, next, pipeline) {
       debug('filter', doc, qs.stringify(doc.metadata.opts.query))
-      doc.id = doc.metadata.input + '?' + qs.stringify(doc.metadata.opts.query)
+      if (doc.metadata.opts.params && doc.metadata.opts.params.id) {
+        doc.id = doc.metadata.opts.params.id
+      } else {
+        doc.id = doc.metadata.input + '?' + qs.stringify(doc.metadata.opts.query)
+      }
       // let newDoc = Object.clone(doc)
       // newDoc.key = ''
       //

@@ -134,27 +134,27 @@ export default {
               // text: this.logs.count
             }, // this.counter.inner
             icon: 'fa fa-chart-bar'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.count
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.count
+          //       }
+          //     }]
+          //   }
+          // }
 
         }],
         'range': [{
@@ -167,27 +167,27 @@ export default {
               text: ''
             },
             icon: 'fa fa-calendar'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.range
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.range
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         'tags': [{
           component: 'admin-lte-small-box',
@@ -199,27 +199,27 @@ export default {
               text: ''
             },
             icon: 'fa fa-tags'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.tags
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.tags
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         'hosts': [{
           component: 'admin-lte-small-box',
@@ -231,27 +231,27 @@ export default {
               text: ''
             },
             icon: 'fa fa-server'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.inner.text = val.hosts
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.inner.text = val.hosts
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         '6': [{
           component: 'MyRange',
@@ -260,36 +260,34 @@ export default {
             range: []
             // range: this.MyRange
             // ref: 'MyRange'
-          },
-          source: {
-            requests: {
-              once: [{
-                params: {
-                  path: 'logs',
-                  query: {
-                    register: 'periodical',
-                    'transformation': [
-                      { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                      'limit:30000'
-                    ]
-                  }
-
-                },
-                callback: function (val) {
-                  this.props.range = val.range
-                }
-              }]
-            }
           }
+          // source: {
+          //   requests: {
+          //     once: [{
+          //       params: {
+          //         path: 'logs',
+          //         query: {
+          //           register: 'periodical',
+          //           'transformation': [
+          //             { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+          //             'limit:30000'
+          //           ]
+          //         }
+          //
+          //       },
+          //       callback: function (val) {
+          //         this.props.range = val.range
+          //       }
+          //     }]
+          //   }
+          // }
         }],
         '7': [{
-          component: 'MyChart'
-        }],
-
-        '8': [{
-          component: 'MyTable',
-          props: {
-            data: []
+          component: 'MyChart',
+          prev: {
+            // counter: 0
+            range: [0, 0],
+            current_range: [0, 0]
           },
           source: {
             requests: {
@@ -297,92 +295,227 @@ export default {
                 {
                   params: {
                     path: 'logs',
-                    query: {
-                      // register: 'periodical',
-                      'q': [
-                        { 'data': ['log'] },
-                        { 'metadata': ['host', 'tag', 'timestamp'] }
-                      ],
-                      'transformation': [
-                        { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-                        'slice:0:10'
-                      ]
-                    }
-                    // body: {
-                    //   'transformation': 'limit:30000'
-                    //
+                    params: { prop: 'range' }
+                    // query: {
+                    //   // register: 'periodical',
+                    //   'transformation': [
+                    //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                    //     'limit:30000'
+                    //   ]
                     // }
+
                   },
                   callback: function (val) {
-                    debug('MyTable', val)
-                    if (!Array.isArray(val)) val = [val]
+                    if (val) {
+                      debug('MyChart RANGE', val, this.prev)
+                      this.prev.range = val.range
+                      // const PERIODICAL = 5 * 1000 // 5 secs
+                      // this.prev.range[0] = val.range[0]
+                      // this.prev.range[1] = val.range[0] + PERIODICAL
 
-                    val.sort(function (a, b) {
-                      if (a.metadata.timestamp > b.metadata.timestamp) {
-                        return -1
-                      }
-                      if (a.metadata.timestamp < b.metadata.timestamp) {
-                        return 1
-                      }
-                      // a must be equal to b
-                      return 0
-                    })
-
-                    for (let i = 0; i < val.length; i++) {
-                      let row = Object.merge(val[i].data, val[i].metadata)
-                      row.date = moment(row.timestamp).fromNow()
-
-                      debug('MyTable', row)
-                      this.props.data.push(row)
-                    }
-                  }
-                },
-                {
-                  params: {
-                    path: 'logs',
-                    query: {
-                      register: 'changes',
-                      'q': [
-                        { 'data': ['log'] },
-                        { 'metadata': ['host', 'tag', 'timestamp'] }
-                      ]
-                      // 'transformation': [
-                      //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
-                      //   'slice:0:9'
-                      // ]
-                    }
-                  // body: {
-                  //   'transformation': 'limit:30000'
-                  //
-                  // }
-                  },
-                  callback: function (val) {
-                    debug('MyTable changes', val)
-                    if (!Array.isArray(val)) val = [val]
-
-                    val.sort(function (a, b) {
-                      if (a.metadata.timestamp > b.metadata.timestamp) {
-                        return -1
-                      }
-                      if (a.metadata.timestamp < b.metadata.timestamp) {
-                        return 1
-                      }
-                      // a must be equal to b
-                      return 0
-                    })
-
-                    for (let i = 0; i < val.length; i++) {
-                      let row = Object.merge(val[i].data, val[i].metadata)
-                      row.date = moment(row.timestamp).fromNow()
-
-                      debug('MyTable changes', row)
-                      this.props.data.push(row)
+                      // this.props.range = val.range
                     }
                   }
                 }
+
+              ],
+              periodical: [
+                {
+                  params: function (_key) {
+                    // debug('MyChart ', arguments)
+
+                    let key = [
+                      this.component + '.count',
+                      this.component + '.count.tags.nginx'
+                    ]
+
+                    let source
+
+                    if (this.prev.range[0] !== 0) {
+                      // const MINUTE = 60 * 1000
+                      const PERIODICAL = 5 * 1000 // 5 secs
+                      // this.prev.counter++
+                      // debug('MyChart start time', new Date(1557134755000))
+                      // debug('MyChart start time', new Date(1557134755000))
+                      let sources = [
+                        {
+
+                          params: { id: key[0] },
+                          query: { 'aggregation': 'count' },
+                          range: 'posix ' + this.prev.range[0] + '-' + this.prev.range[1] + '/*'
+                          // query: {
+                          //   // register: 'periodical',
+                          //   'transformation': [
+                          //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                          //     'limit:30000'
+                          //   ]
+                          // }
+                        },
+                        {
+
+                          params: { prop: 'tags', value: 'nginx', id: key[1] },
+                          query: { 'aggregation': 'count' },
+                          range: 'posix ' + this.prev.range[0] + '-' + this.prev.range[1] + '/*'
+                          // query: {
+                          //   // register: 'periodical',
+                          //   'transformation': [
+                          //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                          //     'limit:30000'
+                          //   ]
+                          // }
+                        }
+                      ]
+
+                      // debug('MyChart ', key, _key, key.indexOf(_key))
+                      if (_key && key.indexOf(_key) > -1) {
+                        source = sources[key.indexOf(_key)]
+                      }
+
+                      this.prev.range[0] += PERIODICAL
+                      this.prev.range[1] += PERIODICAL
+                    }
+
+                    return { key, source }
+                  },
+                  callback: function (val, key) {
+                    debug('MyChart cb ', key, val)
+                  }
+                }
+                // {
+                //   params: function () {
+                //     let key = this.component + '.count'
+                //     debug('MyChart ', key, this.prev)
+                //     // const MINUTE = 60 * 1000
+                //     // const PERIODICAL = 5 * 1000 // 5 secs
+                //     // this.prev.counter++
+                //     // debug('MyChart start time', new Date(1557134755000))
+                //     // debug('MyChart start time', new Date(1557134755000))
+                //     let source = {
+                //
+                //       params: { id: key },
+                //       query: { 'aggregation': 'count' },
+                //       range: 'posix ' + this.prev.range[0] + '-' + this.prev.range[1] + '/*'
+                //       // query: {
+                //       //   // register: 'periodical',
+                //       //   'transformation': [
+                //       //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                //       //     'limit:30000'
+                //       //   ]
+                //       // }
+                //     }
+                //
+                //     // this.prev.start += PERIODICAL
+                //     // this.prev.end += PERIODICAL
+                //
+                //     return { key, source }
+                //   },
+                //   callback: function (val) {
+                //     debug('MyChart cb count', val, this.prev)
+                //   }
+                // }
               ]
             }
           }
+
+        }],
+
+        '8': [{
+          component: 'MyTable',
+          props: {
+            data: []
+          }
+          // source: {
+          //   requests: {
+          //     once: [
+          //       {
+          //         params: {
+          //           path: 'logs',
+          //           query: {
+          //             // register: 'periodical',
+          //             'q': [
+          //               { 'data': ['log'] },
+          //               { 'metadata': ['host', 'tag', 'timestamp'] }
+          //             ],
+          //             'transformation': [
+          //               { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+          //               'slice:0:10'
+          //             ]
+          //           }
+          //           // body: {
+          //           //   'transformation': 'limit:30000'
+          //           //
+          //           // }
+          //         },
+          //         callback: function (val) {
+          //           debug('MyTable', val)
+          //           if (!Array.isArray(val)) val = [val]
+          //
+          //           val.sort(function (a, b) {
+          //             if (a.metadata.timestamp > b.metadata.timestamp) {
+          //               return -1
+          //             }
+          //             if (a.metadata.timestamp < b.metadata.timestamp) {
+          //               return 1
+          //             }
+          //             // a must be equal to b
+          //             return 0
+          //           })
+          //
+          //           for (let i = 0; i < val.length; i++) {
+          //             let row = Object.merge(val[i].data, val[i].metadata)
+          //             row.date = moment(row.timestamp).format('dddd, MMMM Do YYYY, h:mm:ss a')
+          //
+          //             debug('MyTable', row)
+          //             this.props.data.push(row)
+          //           }
+          //         }
+          //       },
+          //       {
+          //         params: {
+          //           path: 'logs',
+          //           query: {
+          //             register: 'changes',
+          //             'q': [
+          //               { 'data': ['log'] },
+          //               { 'metadata': ['host', 'tag', 'timestamp'] }
+          //             ]
+          //             // 'transformation': [
+          //             //   { 'orderBy': { 'index': 'r.desc(timestamp)' } },
+          //             //   'slice:0:9'
+          //             // ]
+          //           }
+          //         // body: {
+          //         //   'transformation': 'limit:30000'
+          //         //
+          //         // }
+          //         },
+          //         callback: function (val) {
+          //           debug('MyTable changes', val)
+          //           if (!Array.isArray(val)) val = [val]
+          //
+          //           val.sort(function (a, b) {
+          //             if (a.metadata.timestamp > b.metadata.timestamp) {
+          //               return -1
+          //             }
+          //             if (a.metadata.timestamp < b.metadata.timestamp) {
+          //               return 1
+          //             }
+          //             // a must be equal to b
+          //             return 0
+          //           })
+          //
+          //           for (let i = 0; i < val.length; i++) {
+          //             let row = Object.merge(val[i].data, val[i].metadata)
+          //             row.date = moment(row.timestamp).format('dddd, MMMM Do YYYY, h:mm:ss a')
+          //
+          //             debug('MyTable changes', row)
+          //             this.props.data.unshift(row)
+          //           }
+          //         }
+          //       }
+          //     ]
+          //   }
+          // }
         }]
         // '9': [{
         //   component: 'MyRange'
@@ -532,7 +665,8 @@ export default {
       let pipeline_id = template.input[0].poll.id
       // debug('LogsPipeline ', template.input[0].poll.conn[0])
 
-      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+      // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
+      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(Object.clone(this.components))
       // template.input[0].poll.conn[0].queries = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
 
       // debug('LogsPipeline ', template.input[0].poll.conn[0].requests)

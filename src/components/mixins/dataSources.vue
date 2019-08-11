@@ -50,6 +50,7 @@ export default {
 
   mounted: function () {
     debug('mounted')
+    this.__bind_components_to_sources(this.components)
     this.create_pipelines()
   },
   updated: function () {
@@ -74,14 +75,59 @@ export default {
   //   ])
   // }
   methods: {
+    __bind_components_to_sources: function (_components) {
+      for (const prop in _components) {
+        let components = _components[prop]
+
+        if (!Array.isArray(components)) {
+          components = [components]
+        }
+
+        for (const index in components) {
+          if (components[index].source && components[index].source.requests) {
+            let _requests = components[index].source.requests
+
+            for (const req_type in _requests) {
+              let reqs = _requests[req_type]
+              if (!Array.isArray(reqs)) { reqs = [reqs] }
+
+              for (let j = 0; j < reqs.length; j++) {
+                // let key = reqs[j].params
+                // let source = reqs[j].params
+                // let callback = reqs[j].callback
+
+                // debug('__components_sources_to_requests', j, reqs, typeof (source))
+
+                // debug('__components_sources_to_requests', req_type, key)
+                debug('__bind_components_to_sources TYPE', typeof (reqs[j].params), reqs)
+
+                if (typeof reqs[j].params === 'function') {
+                  reqs[j].params = reqs[j].params.bind(components[index])
+                  // source.bind(components[index])
+                }
+                // if (typeof callback === 'function') {
+                //   // reqs[j].params = callback.bind(components[index])
+                // }
+                // debug('__components_sources_to_requests', req_type, key)
+                //
+                // if (!sources[req_type]) sources[req_type] = {}
+                //
+                // sources[req_type][key] = source
+              }
+            }
+          }
+        }
+      }
+    },
     __update_component_data: function (component, key, data) {
-      debug('__update_component_data', component)
+      debug('__update_component_data', component, key)
       let callback = this.__get_source_callback_from_key(component.source, key)
 
       debug('__update_component_data', callback)
 
       if (callback && typeof callback === 'function') {
-        callback.attempt(data, component)
+        callback.attempt([data, key], component)
+        // callback(data)
       }
     },
     __get_source_callback_from_key: function (source, key) {
@@ -93,7 +139,12 @@ export default {
           if (!Array.isArray(reqs)) reqs = [reqs]
 
           for (let i = 0; i < reqs.length; i++) {
-            if (this.__query_to_key(reqs[i].params) === key) {
+            let _key = this.__query_to_key(reqs[i].params)
+            // if(Array.isArray(_key) && _key.indexOf(key) > -1 ){
+            //   let index = _key.indexOf(key)
+            // }
+            // else
+            if (_key === key || (Array.isArray(_key) && _key.indexOf(key) > -1)) {
               debug('__get_source_callback_from_key', reqs)
               callback = reqs[i].callback
             }
@@ -111,15 +162,26 @@ export default {
           if (!Array.isArray(reqs)) reqs = [reqs]
 
           for (let i = 0; i < reqs.length; i++) {
-            keys.push(this.__query_to_key(reqs[i].params))
+            let key = this.__query_to_key(reqs[i].params)
+            if (Array.isArray(key)) {
+              Array.each(key, function (_key) {
+                keys.push(_key)
+              })
+            } else {
+              keys.push(key)
+            }
           }
         }
       }
-
+      debug('__source_to_keys', keys)
       return keys
     },
     __query_to_key: function (query) {
-      if (typeof query === 'string') {
+      if (typeof query === 'function') {
+        let _result = query.attempt()
+        debug('__query_to_key', _result)
+        return _result.key
+      } else if (typeof query === 'string') {
         return query
       } else {
         let _query = Object.merge(query.query, query.body)
@@ -217,8 +279,8 @@ export default {
 
       // let _components = JSON.parse(JSON.stringify(this.components))
       // debug('__components_sources_to_requests', _components)
-      for (const key in _components) {
-        let components = _components[key]
+      for (const prop in _components) {
+        let components = _components[prop]
 
         if (!Array.isArray(components)) {
           components = [components]
@@ -233,24 +295,38 @@ export default {
               if (!Array.isArray(reqs)) { reqs = [reqs] }
 
               for (let j = 0; j < reqs.length; j++) {
-                let key_source = Object.clone(reqs[j].params)
+                let key = reqs[j].params
                 let source = reqs[j].params
 
                 // debug('__components_sources_to_requests', j, reqs, typeof (source))
 
-                // debug('__components_sources_to_requests', req_type, key_source)
+                // debug('__components_sources_to_requests', req_type, key)
+                debug('__components_sources_to_requests TYPE', typeof (source), reqs)
 
                 if (typeof source === 'string') {
                   source = { path: source.substring(0, source.indexOf('?')), query: qs.parse(source.substring(source.indexOf('?') + 1)) }
+                } else if (typeof source === 'function') {
+                  // source = source.bind(components[index])
+                  // let _result = source.attempt(undefined, components[index])
+                  let _result = source.attempt(undefined)
+                  debug('__components_sources_to_requests RESULT', _result, components[index])
+                  key = _result.key
+                  // source = { bind: components[index], function: source }
+                  // source = _result.source
                 } else {
-                  key_source = key_source.path + '?' + qs.stringify(Object.merge(key_source.query, key_source.body))
+                  key = key.path + '?' + qs.stringify(Object.merge(key.query, key.body))
                 }
-
-                debug('__components_sources_to_requests', req_type, key_source)
 
                 if (!sources[req_type]) sources[req_type] = {}
 
-                sources[req_type][key_source] = source
+                if (Array.isArray(key)) {
+                  Array.each(key, function (_key, index) {
+                    debug('__components_sources_to_requests', req_type, _key)
+                    sources[req_type][_key] = source// always the same source...function
+                  })
+                } else {
+                  sources[req_type][key] = source
+                }
               }
             }
           }
@@ -262,13 +338,19 @@ export default {
         if (!requests[req_type]) requests[req_type] = []
 
         for (const key in sources[req_type]) {
-          let query = Object.clone({ query: sources[req_type][key].query })
+          let query = sources[req_type][key]
 
           requests[req_type].push({
             init: function (req, next, app) {
-            // debug('INIT', app)
-              app.io.emit('/', query)
-              debug('FUNC EMIT', query, next)
+              debug('INIT %s %o', key, query)
+              let _query = query
+              // if (typeof query === 'function') { _query = query.pass(key)().source }
+              if (typeof query === 'function') { _query = query.attempt(key).source }
+              // if (query.bind && query.function) { _query = query.function.attempt(key, query.bind).source }
+
+              if (_query !== undefined) { app.io.emit('/', _query) }
+
+              // debug('FUNC EMIT', query, next)
 
               // next()
             }
