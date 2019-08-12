@@ -348,7 +348,13 @@ export default {
               if (typeof query === 'function') { _query = query.attempt(key).source }
               // if (query.bind && query.function) { _query = query.function.attempt(key, query.bind).source }
 
-              if (_query !== undefined) { app.io.emit('/', _query) }
+              if (_query !== undefined) {
+                if (!Array.isArray(_query)) {
+                  _query = [_query]
+                }
+
+                for (let i = 0; i < _query.length; i++) { app.io.emit('/', _query[i]) }
+              }
 
               // debug('FUNC EMIT', query, next)
 

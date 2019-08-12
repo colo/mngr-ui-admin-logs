@@ -1,5 +1,7 @@
 
 <script>
+import Vue from 'vue'
+
 import * as Debug from 'debug'
 const debug = Debug('pages:Logs')
 
@@ -289,8 +291,11 @@ export default {
             range: [0, 0]
           },
           current: {
-            range: [0, 0],
-            keys: []
+            range: [0, 0]
+            // keys: [
+            //   '.count',
+            //   '.count.tags.nginx'
+            // ]
           },
           source: {
             requests: {
@@ -312,13 +317,14 @@ export default {
                     if (val) {
                       const MINUTE = 60000
                       debug('MyChart RANGE', val, this.prev)
-                      this.prev.range[1] = val.range[1]
+                      this.prev.range = val.range
                       this.prev.range[0] = val.range[1] - 5 * MINUTE
+
+                      // Vue.$set(this.prev.range, 1, val.range[1])
+                      // Vue.$set(this.prev.range, 0, val.range[1] - 5 * MINUTE)
                       // const PERIODICAL = 5 * 1000 // 5 secs
                       // this.prev.range[0] = val.range[0]
                       // this.prev.range[1] = val.range[0] + PERIODICAL
-
-                      // this.props.range = val.range
                     }
                   }
                 }
@@ -330,24 +336,57 @@ export default {
                     debug('MyChart ', this.prev, this.current, _key)
 
                     const PERIODICAL = 5 * 1000 // 5 secs
-                    const COUNTS = [
-                      this.component + '.count',
-                      this.component + '.count.tags.nginx'
+                    const KEYS = [
+                      '.count'
+                      // '.count.tags.nginx'
                     ]
+                    // const COUNTS = [
+                    //   this.component + '.count',
+                    //   this.component + '.count.tags.nginx'
+                    // ]
 
                     let source
+                    let key = []
 
-                    if (!_key) { // || !this.current.keys.contains(_key)
+                    for (let i = 0; i < KEYS.length; i++) {
+                      key.push(this.component + KEYS[i])
+                    }
+
+                    if (_key && this.prev.range[1] > 0) { // || !this.current.keys.contains(_key)
+                      source = []
                       this.current.range = Array.clone(this.prev.range)
 
                       do {
-                        for (let i = 0; i < COUNTS.length; i++) {
-                          this.current.keys.push(COUNTS[i] + '@' + this.current.range[0] + '-' + this.current.range[1])
+                        let source_tmp = {
+
+                          params: { id: _key },
+                          query: { 'aggregation': 'count' },
+                          range: 'posix ' + this.current.range[0] + '-' + this.current.range[1] + '/*'
+                          // query: {
+                          //   // register: 'periodical',
+                          //   'transformation': [
+                          //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                          //     'limit:30000'
+                          //   ]
+                          // }
                         }
+
+                        source.push(source_tmp)
                         this.current.range[0] += PERIODICAL
                         this.current.range[1] += PERIODICAL
                       }
                       while (this.current.range[0] < this.prev.range[1])
+
+                      // this.current.range = Array.clone(this.prev.range)
+                      //
+                      // do {
+                      //   for (let i = 0; i < COUNTS.length; i++) {
+                      //     this.current.keys.push(COUNTS[i] + '@' + this.current.range[0] + '-' + this.current.range[1])
+                      //   }
+                      //   this.current.range[0] += PERIODICAL
+                      //   this.current.range[1] += PERIODICAL
+                      // }
+                      // while (this.current.range[0] < this.prev.range[1])
                     }
                     // if (this.prev.range[0] !== 0) {
                     //   // const MINUTE = 60 * 1000
@@ -393,14 +432,14 @@ export default {
                     //   this.prev.range[1] += PERIODICAL
                     // }
 
-                    let key = this.current.keys
+                    // let key = this.current.keys
 
-                    debug('MyChart KEY ', this.current.keys)
+                    debug('MyChart KEY ', key, source)
 
                     return { key, source }
                   },
                   callback: function (val, key) {
-                    this.prev.keys.push(key)
+                    // this.prev.keys.push(key)
                     debug('MyChart cb ', key, val)
                   }
                 }
