@@ -286,16 +286,22 @@ export default {
         }],
         '7': [{
           component: 'MyChart',
+          props: {
+            data: {
+              labels: [],
+              datasets: []
+            }
+          },
           prev: {
             // counter: 0
             range: [0, 0]
           },
           current: {
-            range: [0, 0]
-            // keys: [
+            range: [0, 0],
+            keys: [
             //   '.count',
             //   '.count.tags.nginx'
-            // ]
+            ]
           },
           source: {
             requests: {
@@ -318,7 +324,7 @@ export default {
                       const MINUTE = 60000
                       debug('MyChart RANGE', val, this.prev)
                       this.prev.range = val.range
-                      this.prev.range[0] = val.range[1] - 5 * MINUTE
+                      this.prev.range[0] = val.range[1] - (5 * MINUTE)
 
                       // Vue.$set(this.prev.range, 1, val.range[1])
                       // Vue.$set(this.prev.range, 0, val.range[1] - 5 * MINUTE)
@@ -335,10 +341,10 @@ export default {
                   params: function (_key) {
                     debug('MyChart ', this.prev, this.current, _key)
 
-                    const PERIODICAL = 5 * 1000 // 5 secs
+                    const PERIODICAL = 60 * 1000 // 60 secs
                     const KEYS = [
-                      '.count'
-                      // '.count.tags.nginx'
+                      '.count',
+                      '.tags.nginx'
                     ]
                     // const COUNTS = [
                     //   this.component + '.count',
@@ -356,91 +362,71 @@ export default {
                       source = []
                       this.current.range = Array.clone(this.prev.range)
 
-                      do {
-                        let source_tmp = {
+                      if (!this.current.keys.contains(_key)) {
+                        do {
+                          let source_tmp = {
 
-                          params: { id: _key },
-                          query: { 'aggregation': 'count' },
-                          range: 'posix ' + this.current.range[0] + '-' + this.current.range[1] + '/*'
-                          // query: {
-                          //   // register: 'periodical',
-                          //   'transformation': [
-                          //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                          //     'limit:30000'
-                          //   ]
-                          // }
+                            params: { id: _key },
+                            query: { 'aggregation': 'count' },
+                            range: 'posix ' + this.current.range[0] + '-' + this.current.range[1] + '/*'
+                            // query: {
+                            //   // register: 'periodical',
+                            //   'transformation': [
+                            //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                            //     'limit:30000'
+                            //   ]
+                            // }
+                          }
+
+                          if (_key.split('.').length > 2) {
+                            let prop = _key.split('.')[1]
+                            let value = _key.split('.')[2]
+                            source_tmp.params.prop = prop
+                            source_tmp.params.value = value
+                          }
+
+                          source.push(source_tmp)
+                          this.current.range[0] += PERIODICAL
+                          this.current.range[1] += PERIODICAL
                         }
+                        while (this.current.range[0] < this.prev.range[1])
 
-                        source.push(source_tmp)
-                        this.current.range[0] += PERIODICAL
-                        this.current.range[1] += PERIODICAL
+                        this.current.keys.push(_key)
                       }
-                      while (this.current.range[0] < this.prev.range[1])
-
-                      // this.current.range = Array.clone(this.prev.range)
-                      //
-                      // do {
-                      //   for (let i = 0; i < COUNTS.length; i++) {
-                      //     this.current.keys.push(COUNTS[i] + '@' + this.current.range[0] + '-' + this.current.range[1])
-                      //   }
-                      //   this.current.range[0] += PERIODICAL
-                      //   this.current.range[1] += PERIODICAL
-                      // }
-                      // while (this.current.range[0] < this.prev.range[1])
                     }
-                    // if (this.prev.range[0] !== 0) {
-                    //   // const MINUTE = 60 * 1000
-                    //   const PERIODICAL = 5 * 1000 // 5 secs
-                    //   // this.prev.counter++
-                    //   // debug('MyChart start time', new Date(1557134755000))
-                    //   // debug('MyChart start time', new Date(1557134755000))
-                    //   let sources = [
-                    //     {
-                    //
-                    //       params: { id: key[0] },
-                    //       query: { 'aggregation': 'count' },
-                    //       range: 'posix ' + this.prev.range[0] + '-' + this.prev.range[1] + '/*'
-                    //       // query: {
-                    //       //   // register: 'periodical',
-                    //       //   'transformation': [
-                    //       //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                    //       //     'limit:30000'
-                    //       //   ]
-                    //       // }
-                    //     },
-                    //     {
-                    //
-                    //       params: { prop: 'tags', value: 'nginx', id: key[1] },
-                    //       query: { 'aggregation': 'count' },
-                    //       range: 'posix ' + this.prev.range[0] + '-' + this.prev.range[1] + '/*'
-                    //       // query: {
-                    //       //   // register: 'periodical',
-                    //       //   'transformation': [
-                    //       //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                    //       //     'limit:30000'
-                    //       //   ]
-                    //       // }
-                    //     }
-                    //   ]
-                    //
-                    //   // debug('MyChart ', key, _key, key.indexOf(_key))
-                    //   if (_key && key.indexOf(_key) > -1) {
-                    //     source = sources[key.indexOf(_key)]
-                    //   }
-                    //
-                    //   this.prev.range[0] += PERIODICAL
-                    //   this.prev.range[1] += PERIODICAL
-                    // }
-
-                    // let key = this.current.keys
 
                     debug('MyChart KEY ', key, source)
 
                     return { key, source }
                   },
-                  callback: function (val, key) {
+                  callback: function (val, metadata, key) {
                     // this.prev.keys.push(key)
-                    debug('MyChart cb ', key, val)
+
+                    let label = moment(metadata.range.start).format('DD/MM/YYYY, ha mm:ss') + '-' + moment(metadata.range.end).format('mm:ss')
+                    debug('MyChart cb ', key, val, metadata, label)
+
+                    if (!this.props.data.labels.contains(label)) { this.props.data.labels.push(label) }
+
+                    let dataset = { name: key, chartType: 'bar', values: [] }
+                    Array.each(this.props.data.datasets, function (_dataset, index) {
+                      if (_dataset.name === dataset.name) { dataset = _dataset }
+                    })
+
+                    dataset.values.push(val)
+
+                    let found = false
+                    Array.each(this.props.data.datasets, function (_dataset, index) {
+                      if (_dataset.name === dataset.name) {
+                        found = true
+
+                        if (JSON.stringify(this.props.data.datasets[index].values) !== JSON.stringify(dataset.values)) {
+                          debug('MyChart cb values', JSON.stringify(this.props.data.datasets[index].values), JSON.stringify(dataset.values))
+                          Vue.$set(this.props.data.datasets, index, dataset)
+                        }
+                      }
+                    }.bind(this))
+
+                    if (!found) { this.props.data.datasets.push(dataset) }
                   }
                 }
                 // {

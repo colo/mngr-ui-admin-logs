@@ -119,14 +119,14 @@ export default {
         }
       }
     },
-    __update_component_data: function (component, key, data) {
+    __update_component_data: function (component, key, payload) {
       debug('__update_component_data', component, key)
       let callback = this.__get_source_callback_from_key(component.source, key)
 
       debug('__update_component_data', callback)
 
       if (callback && typeof callback === 'function') {
-        callback.attempt([data, key], component)
+        callback.attempt([payload.data, payload.metadata, key], component)
         // callback(data)
       }
     },
@@ -262,12 +262,12 @@ export default {
                 components[index].source &&
                 this.__source_to_keys(components[index].source).contains(key)
               ) {
-                this.__update_component_data(components[index], key, payload.data)
+                this.__update_component_data(components[index], key, payload)
               }
             }
           } else {
             if (components.source && this.__source_to_keys(components.source).contains(key)) {
-              this.__update_component_data(components, key, payload.data)
+              this.__update_component_data(components, key, payload)
             }
           }
         }
