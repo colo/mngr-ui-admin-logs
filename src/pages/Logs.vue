@@ -297,10 +297,8 @@ export default {
             range: [0, 0]
           },
           current: {
-            range: [0, 0],
+            // range: [0, 0],
             keys: [
-            //   '.count',
-            //   '.count.tags.nginx'
             ]
           },
           source: {
@@ -339,12 +337,17 @@ export default {
               periodical: [
                 {
                   params: function (_key) {
-                    debug('MyChart ', this.prev, this.current, _key)
+                    // debug('MyChart ', this.prev, this.current, _key)
+                    debug('MyChart ', _key)
 
                     const PERIODICAL = 60 * 1000 // 60 secs
                     const KEYS = [
                       '.count',
-                      '.tags.nginx'
+                      '.tags.nginx',
+                      '.tags.apache',
+                      '.tags.web',
+                      '.tags.frontail',
+                      '.tags.stdio'
                     ]
                     // const COUNTS = [
                     //   this.component + '.count',
@@ -352,15 +355,25 @@ export default {
                     // ]
 
                     let source
-                    let key = []
+                    let key
 
-                    for (let i = 0; i < KEYS.length; i++) {
-                      key.push(this.component + KEYS[i])
+                    if (!_key) {
+                      key = []
+                      for (let i = 0; i < KEYS.length; i++) {
+                        key.push(this.component + KEYS[i])
+                      }
                     }
 
-                    if (_key && this.prev.range[1] > 0) { // || !this.current.keys.contains(_key)
+                    if (
+                      _key &&
+                      this.prev.range[1] > 0 &&
+                      (!this.current[_key] || (this.current[_key].range[1] < this.prev.range[1]))
+                    ) { // || !this.current.keys.contains(_key)
                       source = []
-                      this.current.range = Array.clone(this.prev.range)
+                      if (!this.current[_key]) {
+                        this.current[_key] = {}
+                        this.current[_key].range = Array.clone(this.prev.range)
+                      }
 
                       if (!this.current.keys.contains(_key)) {
                         do {
@@ -368,7 +381,7 @@ export default {
 
                             params: { id: _key },
                             query: { 'aggregation': 'count' },
-                            range: 'posix ' + this.current.range[0] + '-' + this.current.range[1] + '/*'
+                            range: 'posix ' + this.current[_key].range[0] + '-' + this.current[_key].range[1] + '/*'
                             // query: {
                             //   // register: 'periodical',
                             //   'transformation': [
@@ -386,10 +399,10 @@ export default {
                           }
 
                           source.push(source_tmp)
-                          this.current.range[0] += PERIODICAL
-                          this.current.range[1] += PERIODICAL
+                          this.current[_key].range[0] += PERIODICAL
+                          this.current[_key].range[1] += PERIODICAL
                         }
-                        while (this.current.range[0] < this.prev.range[1])
+                        while (this.current[_key].range[0] < this.prev.range[1])
 
                         this.current.keys.push(_key)
                       }
@@ -714,7 +727,7 @@ export default {
       // debug('LogsPipeline ', template.input[0].poll.conn[0])
 
       // template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
-      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(Object.clone(this.components))
+      template.input[0].poll.conn[0].requests = this.__components_sources_to_requests(this.components)
       // template.input[0].poll.conn[0].queries = this.__components_sources_to_requests(JSON.parse(JSON.stringify(this.components)))
 
       // debug('LogsPipeline ', template.input[0].poll.conn[0].requests)

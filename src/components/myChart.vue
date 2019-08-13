@@ -46,9 +46,9 @@ export default {
     }
   },
   // components: { WrappersFrappeCharts },
-  mounted: function () {
-    ready(this.create_chart())
-  },
+  // mounted: function () {
+  //   ready(this.create_chart())
+  // },
   watch: {
     'data': {
       handler: function (val) {
@@ -60,8 +60,8 @@ export default {
         // if (!this.$options.chart) { this.create_chart() }
         //
         // if (this.$options.chart) { this.$options.chart.update(val) }
-      },
-      deep: true
+      }
+      // deep: true
     }
   },
   data () {

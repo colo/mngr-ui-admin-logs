@@ -325,7 +325,7 @@ export default {
   },
   watch: {
     components: {
-      immediate: true,
+      // immediate: true,
       deep: true,
       handler: function (components) {
         debug('watch components', components)
@@ -340,7 +340,7 @@ export default {
       }
     },
     grid: {
-      immediate: true,
+      // immediate: true,
       deep: true,
       handler: function (grid) {
         debug('watch grid', grid)
