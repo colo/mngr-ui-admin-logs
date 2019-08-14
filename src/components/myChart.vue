@@ -55,11 +55,11 @@ export default {
         debug('watch', JSON.parse(JSON.stringify(val)))
         // this.update(val)
 
-        this.create_chart()
+        // this.create_chart()
 
-        // if (!this.$options.chart) { this.create_chart() }
-        //
-        // if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(val))) }
+        if (!this.$options.chart) { this.create_chart() }
+
+        if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(val))) }
       },
       // inmediate: true,
       deep: true
