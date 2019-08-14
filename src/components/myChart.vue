@@ -46,28 +46,29 @@ export default {
     }
   },
   // components: { WrappersFrappeCharts },
-  // mounted: function () {
-  //   ready(this.create_chart())
-  // },
+  mounted: function () {
+    ready(this.create_chart())
+  },
   watch: {
     'data': {
       handler: function (val) {
-        debug('watch', val, this)
+        debug('watch', JSON.parse(JSON.stringify(val)))
         // this.update(val)
 
         this.create_chart()
 
         // if (!this.$options.chart) { this.create_chart() }
         //
-        // if (this.$options.chart) { this.$options.chart.update(val) }
-      }
-      // deep: true
+        // if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(val))) }
+      },
+      // inmediate: true,
+      deep: true
     }
   },
   data () {
     return {
       id: 'myChart',
-      chart: undefined,
+      // chart: undefined,
       options: {
         // data: {
         //   labels: ['12am-3am', '3am-6am', '6am-9am', '9am-12pm',
@@ -104,7 +105,7 @@ export default {
         // type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
         type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
         height: 300,
-        colors: ['purple', '#ffa3ef', 'light-blue'],
+        // colors: ['purple', '#ffa3ef', 'light-blue'],
 
         tooltipOptions: {
           formatTooltipX: d => (d + '').toUpperCase(),
@@ -115,10 +116,10 @@ export default {
   },
   methods: {
     create_chart: function () {
-      if (this.data && this.data.labels.length > 0 && this.data.datasets.length > 0) {
+      if (document.getElementById(this.id) && this.data && this.data.labels.length > 0 && this.data.datasets.length > 0) {
         this.$options.chart = new Chart(
           document.getElementById(this.id), // containing div
-          Object.merge(Object.clone(this.options), { data: Object.clone(this.data) })
+          Object.merge(Object.clone(this.options), { data: JSON.parse(JSON.stringify(this.data)) })
         )
       }
     }

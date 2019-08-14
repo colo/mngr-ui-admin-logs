@@ -123,7 +123,7 @@ export default {
       debug('__update_component_data', component, key)
       let callback = this.__get_source_callback_from_key(component.source, key)
 
-      debug('__update_component_data', callback)
+      // debug('__update_component_data', callback)
 
       if (callback && typeof callback === 'function') {
         callback.attempt([payload.data, payload.metadata, key], component)
