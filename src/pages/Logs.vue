@@ -152,7 +152,8 @@ export default {
 
                 },
                 callback: function (val) {
-                  this.props.inner.text = val.count
+                  debug('Count', val)
+                  this.props.inner.text = val[0][0].count
                 }
               }]
             }
@@ -185,7 +186,7 @@ export default {
 
                 },
                 callback: function (val) {
-                  this.props.inner.text = val.range
+                  this.props.inner.text = val[0][0].range
                 }
               }]
             }
@@ -217,7 +218,7 @@ export default {
 
                 },
                 callback: function (val) {
-                  this.props.inner.text = val.tags
+                  this.props.inner.text = val[0][0].tags
                 }
               }]
             }
@@ -249,7 +250,7 @@ export default {
 
                 },
                 callback: function (val) {
-                  this.props.inner.text = val.hosts
+                  this.props.inner.text = val[0][0].hosts
                 }
               }]
             }
@@ -279,7 +280,7 @@ export default {
                 },
                 callback: function (val) {
                   let range = JSON.parse(JSON.stringify(this.props.range))
-                  if (range[0] !== val.range[0] && range[1] !== val.range[1]) { this.props.range = val.range }
+                  if (range[0] !== val[0][0].range[0] && range[1] !== val[0][0].range[1]) { this.props.range = val[0][0].range }
                 }
               }]
             }
@@ -565,7 +566,7 @@ export default {
                     // }
                   },
                   callback: function (val) {
-                    val = JSON.parse(JSON.stringify(val))
+                    val = JSON.parse(JSON.stringify(val[0]))
                     debug('MyTable', val)
 
                     if (Array.isArray(val)) val = val[0] // wtf?
