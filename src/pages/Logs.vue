@@ -308,8 +308,7 @@ export default {
           },
           current: {
             // range: [0, 0],
-            keys: [
-            ],
+            keys: {},
             data: {
               labels: [],
               datasets: []
@@ -335,8 +334,9 @@ export default {
                     if (val) {
                       const MINUTE = 60000
                       debug('MyChart RANGE', val, this.prev)
-                      this.prev.range = val.range
-                      this.prev.range[0] = val.range[1] - (5 * MINUTE)
+                      this.prev.range = val[0][0].range
+                      this.prev.range[0] = val[0][0].range[1] - (5 * MINUTE)
+                      // this.prev.range[0] = val.range[1] - MINUTE
 
                       // Vue.$set(this.prev.range, 1, val.range[1])
                       // Vue.$set(this.prev.range, 0, val.range[1] - 5 * MINUTE)
@@ -352,9 +352,9 @@ export default {
                 {
                   params: function (_key) {
                     // debug('MyChart ', this.prev, this.current, _key)
-                    debug('MyChart ', _key)
+                    debug('MyChart periodical', _key)
 
-                    const PERIODICAL = 60 * 1000 // 60 secs
+                    const MINUTE = 60000 // 60 secs
                     // const KEYS = [
                     //   // '.count',
                     //   '.tags.nginx',
@@ -378,51 +378,59 @@ export default {
                       }
                     }
 
+                    // debug('MyChart periodical CURRENT', this.prev.range[1], this.current.keys)
+
                     if (
                       _key &&
                       this.prev.range[1] > 0 &&
-                      (!this.current[_key] || (this.current[_key].range[1] < this.prev.range[1]))
+                      (!this.current.keys[_key] || (this.current.keys[_key].range[1] < this.prev.range[1]))
                     ) { // || !this.current.keys.contains(_key)
+                      debug('MyChart periodical CURRENT', this.current.keys[_key])
+
                       source = []
-                      if (!this.current[_key]) {
-                        this.current[_key] = {}
-                        this.current[_key].range = Array.clone(this.prev.range)
-                      }
-
-                      if (!this.current.keys.contains(_key)) {
-                        do {
-                          let source_tmp = {
-
-                            params: { id: _key },
-                            query: { 'aggregation': 'count' },
-                            range: 'posix ' + this.current[_key].range[0] + '-' + this.current[_key].range[1] + '/*'
-                            // query: {
-                            //   // register: 'periodical',
-                            //   'transformation': [
-                            //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
-                            //     'limit:30000'
-                            //   ]
-                            // }
-                          }
-
-                          if (_key.split('.').length > 2) {
-                            let prop = _key.split('.')[1]
-                            let value = _key.split('.')[2]
-                            source_tmp.params.prop = prop
-                            source_tmp.params.value = value
-                          }
-
-                          source.push(source_tmp)
-                          this.current[_key].range[0] += PERIODICAL
-                          this.current[_key].range[1] += PERIODICAL
+                      if (!this.current.keys[_key]) {
+                        this.current.keys[_key] = {
+                          range: Array.clone(this.prev.range),
+                          count: 0
                         }
-                        while (this.current[_key].range[0] < this.prev.range[1])
-
-                        this.current.keys.push(_key)
+                        // this.current.keys[_key].range = Array.clone(this.prev.range)
                       }
+
+                      // if (!this.current.keys.contains(_key)) {
+                      do {
+                        let source_tmp = {
+
+                          params: { id: _key },
+                          query: { 'aggregation': 'count' },
+                          range: 'posix ' + this.current.keys[_key].range[0] + '-' + (this.current.keys[_key].range[0] + MINUTE) + '/*'
+                          // query: {
+                          //   // register: 'periodical',
+                          //   'transformation': [
+                          //     { 'orderBy': { 'index': 'r.asc(timestamp)' } },
+                          //     'limit:30000'
+                          //   ]
+                          // }
+                        }
+
+                        if (_key.split('.').length > 2) {
+                          let prop = _key.split('.')[1]
+                          let value = _key.split('.')[2]
+                          source_tmp.params.prop = prop
+                          source_tmp.params.value = value
+                        }
+
+                        source.push(source_tmp)
+                        this.current.keys[_key].range[0] += MINUTE
+                        this.current.keys[_key].count++
+                        // this.current.keys[_key].range[1] = JSON.parse(JSON.stringify(this.current.keys[_key])).range[1] + (MINUTE * 5)
+                      }
+                      while (this.current.keys[_key].range[0] < this.prev.range[1])
+
+                      // this.current.keys.push(_key)
+                      // }
                     }
 
-                    debug('MyChart KEY ', key, source)
+                    debug('MyChart periodical KEY ', key, source)
 
                     return { key, source }
                   },
@@ -442,7 +450,7 @@ export default {
                       name = name.split('.')[2]
                     }
 
-                    let dataset = { name: name, chartType: 'bar', values: [] }
+                    let dataset = { name: name, chartType: 'bar', values: [], _key: key }
                     for (let index = 0; index < this.current.data.datasets.length; index++) {
                       if (this.current.data.datasets[index].name === dataset.name) { dataset = this.current.data.datasets[index] }
                     }
@@ -476,15 +484,21 @@ export default {
                     }
 
                     if (this.KEYS.length === this.current.data.datasets.length) {
+                      // let data = JSON.parse(JSON.stringify(this.current.data))
+                      debug('MyChart cb UPDATING2', this.current.data.datasets, this.current.keys)
+                      // this.props.data = data
+
                       // debug('MyChart cb UPDATING', this.KEYS.length, this.current.data.datasets.length)
 
-                      // let datasets = this.current.data.datasets
+                      let datasets = this.current.data.datasets
                       let match_length = true
 
                       for (let i = 0; i < this.current.data.datasets.length; i++) {
                         let dataset = this.current.data.datasets[i]
-                        if (dataset.values.length !== this.KEYS.length) { match_length = false }
+                        if (dataset.values.length !== this.current.keys[dataset._key].count) { match_length = false }
                       }
+
+                      debug('MyChart cb KEYS', this.current.data.datasets, this.current.keys)
 
                       if (match_length) {
                         // this.update(datasets)
