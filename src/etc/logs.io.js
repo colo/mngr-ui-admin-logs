@@ -1,6 +1,1 @@
-'use strict'
-const App = require('node-app-socket.io-client/index')
-import DefaultConn from '@etc/default.io'
-
-let _app = new App(Object.merge(DefaultConn, { path: '/logs' }))
-export default _app.io
+/home/colo/projects/mngr-ui-admin-logs/src/apps/logs/etc/logs.io.js

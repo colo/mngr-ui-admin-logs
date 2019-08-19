@@ -7,13 +7,13 @@ const routes = [
       breadcrumb: { label: 'Home', icon: 'home' }
     },
     children: [
-      // {
-      //   path: '',
-      //   component: () => import('pages/Index'),
-      //   meta: {
-      //     breadcrumb: { label: 'Index', icon: 'widgets' }
-      //   }
-      // },
+      {
+        path: '',
+        component: () => import('@apps/root/index'),
+        meta: {
+          breadcrumb: { label: 'Index', icon: 'widgets' }
+        }
+      },
 
       // {
       //   path: 'hosts',
@@ -44,9 +44,9 @@ const routes = [
       //   ]
       // },
       {
-        path: '',
+        path: '/logs',
         name: 'logs',
-        component: () => import('pages/Logs'),
+        component: () => import('@apps/logs/index'),
         meta: {
           breadcrumb: { label: 'Logs', icon: 'fas fa-tachometer-alt' }
         }

@@ -100,7 +100,8 @@ module.exports = function (ctx) {
           '@etc': path.resolve(__dirname, './src/etc'),
           '@components': path.resolve(__dirname, './src/components'),
           '@mixins': path.resolve(__dirname, './src/components/mixins'),
-          '@wrappers': path.resolve(__dirname, './src/components/wrappers')
+          '@wrappers': path.resolve(__dirname, './src/components/wrappers'),
+          '@apps': path.resolve(__dirname, './src/apps'),
         }
 
         /**

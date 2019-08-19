@@ -126,7 +126,7 @@ export default {
       // debug('__update_component_data', callback)
 
       if (callback && typeof callback === 'function') {
-        callback.attempt([payload.data, payload.metadata, key], component)
+        callback.attempt([payload.data, payload.metadata, key, this], component)
         // callback(data)
       }
     },

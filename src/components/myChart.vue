@@ -20,6 +20,14 @@ export default {
 
   chart: undefined,
   props: {
+    id: {
+      type: [String],
+      default: 'myFrappeChart'
+    },
+    max: {
+      type: [Number],
+      default: 5
+    },
     data: {
       type: [Object],
       default: function () {
@@ -52,14 +60,34 @@ export default {
   watch: {
     'data': {
       handler: function (val) {
-        debug('watch', JSON.parse(JSON.stringify(val)))
         // this.update(val)
 
         // this.create_chart()
+        let _val = { labels: [], datasets: [] }
+        if (val && val.labels.length >= this.max) {
+          for (let i = this.max - 1; i >= 0; i--) {
+            _val.labels[i] = val.labels[i]
+          }
+          _val.labels = _val.labels.clean()
+
+          Array.each(val.datasets, function (dataset, index) {
+            _val.datasets[index] = Object.clone(dataset)
+            _val.datasets[index].values = []
+            for (let i = this.max - 1; i >= 0; i--) {
+              _val.datasets[index].values[i] = dataset.values[i]
+            }
+
+            _val.datasets[index].values = _val.datasets[index].values.clean()
+          }.bind(this))
+        } else {
+          _val = val
+        }
+
+        debug('watch data', JSON.parse(JSON.stringify(_val)))
 
         if (!this.$options.chart) { this.create_chart() }
 
-        if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(val))) }
+        if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(_val))) }
       },
       // inmediate: true,
       deep: true
@@ -67,7 +95,6 @@ export default {
   },
   data () {
     return {
-      id: 'myChart',
       // chart: undefined,
       options: {
         // data: {

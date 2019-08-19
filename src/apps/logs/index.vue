@@ -12,7 +12,7 @@ import DataSourcesMixin from '@components/mixins/dataSources'
 // import Test from '@components/test/test.vue'
 
 import Pipeline from 'js-pipeline'
-import LogsPipeline from '@libs/pipelines/logs'
+import LogsPipeline from './pipelines/logs'
 
 // import { dom } from 'quasar'
 // const { height, width } = dom
@@ -56,9 +56,9 @@ export default {
             // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
             // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
             // second row
-            { x: 1, y: 1, w: 10, h: 2, i: '6' },
-            { x: 0, y: 2, w: 12, h: 16, i: '7' },
-            { x: 0, y: 3, w: 12, h: 30, i: '8' }
+            { x: 1, y: 1, w: 10, h: 2, i: 'range_selector' },
+            { x: 0, y: 2, w: 12, h: 16, i: 'chart' },
+            { x: 0, y: 3, w: 12, h: 30, i: 'table' }
             // { x: 0, y: 4, w: 12, h: 2, i: '9' }
           ],
           'md': [
@@ -69,9 +69,9 @@ export default {
             // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
             // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
             // second row
-            { x: 1, y: 1, w: 6, h: 2, i: '6' },
-            { x: 0, y: 2, w: 8, h: 16, i: '7' },
-            { x: 0, y: 3, w: 8, h: 20, i: '8' }
+            { x: 1, y: 1, w: 6, h: 2, i: 'range_selector' },
+            { x: 0, y: 2, w: 8, h: 16, i: 'chart' },
+            { x: 0, y: 3, w: 8, h: 20, i: 'table' }
             // { x: 0, y: 4, w: 8, h: 2, i: '9' }
 
           ],
@@ -83,9 +83,9 @@ export default {
             // { x: 8, y: 0, w: 2, h: 7, i: '4', immobile: true },
             // { x: 10, y: 0, w: 2, h: 7, i: '5', immobile: true },
             // second row
-            { x: 1, y: 2, w: 4, h: 2, i: '6' },
-            { x: 0, y: 3, w: 6, h: 16, i: '7' },
-            { x: 0, y: 4, w: 6, h: 20, i: '8' }
+            { x: 1, y: 2, w: 4, h: 2, i: 'range_selector' },
+            { x: 0, y: 3, w: 6, h: 16, i: 'chart' },
+            { x: 0, y: 4, w: 6, h: 20, i: 'table' }
             // { x: 0, y: 5, w: 6, h: 2, i: '9' }
           ]
 
@@ -256,7 +256,7 @@ export default {
             }
           }
         }],
-        '6': [{
+        'range_selector': [{
           component: 'MyRange',
           props: {
             // range: this.$store.state[this.id + '_sources']['logs?register=periodical&transformation=limit%3A30000']['range']
@@ -286,9 +286,10 @@ export default {
             }
           }
         }],
-        '7': [{
+        'chart': [{
           component: 'MyChart',
           props: {
+            id: 'chart.logs',
             data: {
               labels: [],
               datasets: []
@@ -552,7 +553,7 @@ export default {
 
         }],
 
-        '8': [{
+        'table': [{
           component: 'MyTable',
           props: {
             data: []

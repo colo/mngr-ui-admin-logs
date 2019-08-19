@@ -225,7 +225,7 @@ export default {
   },
   updated: function () {
     // console.log('height:', height(document.getElementById('logs')))
-    debug('updated', height(this.$refs.logs.$el))
+    debug('updated', height(this.$refs[this.id].$el))
   },
   mounted: function () {
     debug('mounted', this.getGridHeight())
@@ -353,8 +353,8 @@ export default {
   methods: {
 
     getGridHeight: function () {
-      debug('getGridHeight', height(document.getElementById('logs')))
-      return height(document.getElementById('logs')) + 700
+      debug('getGridHeight', height(document.getElementById(this.id)))
+      return height(document.getElementById(this.id)) + 700
     },
 
     resolveComponent: function (component) {
