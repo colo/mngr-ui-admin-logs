@@ -165,19 +165,22 @@ export default {
                 }
 
               },
-              callback: function (tables, metadata, vm) {
-                if (tables) {
+              callback: function (table, metadata, key, vm) {
+                if (table) {
                   let label = moment(metadata.timestamp).format('DD/MM/YYYY, ha mm:ss') + '-' + moment(metadata.timestamp).format('mm:ss')
 
                   if (!this.current.data.labels.contains(label)) { this.current.data.labels.push(label) }
 
                   let index_of_value = this.current.data.labels.indexOf(label)
 
-                  Array.each(tables, function (data) {
+                  debug('MyChart TABLE ', table, key)
+
+                  Array.each(table, function (data) {
                     Array.each(data, function (val) {
-                      debug('MyChart cb ', val, metadata, label, index_of_value)
+                      debug('MyChart cb ', val, metadata, label, index_of_value, table)
 
                       let name = val.path
+                      // if (name.indexOf(table) > -1) { name = name.substring(name.indexOf(table + '.') + 1) }
 
                       let dataset = { name: name, chartType: 'bar', values: [], _key: val.path }
                       for (let index = 0; index < this.current.data.datasets.length; index++) {
