@@ -231,7 +231,7 @@ export default {
   mounted: function () {
     debug('mounted', this.getGridHeight())
     // console.log('height:', height(document.getElementById('logs')))
-    this.height = this.getGridHeight() + 'px'
+    this.height = this.getGridHeight() + 700 + 'px'
   },
   created: function () {
     debug('created', this.id)
@@ -358,7 +358,8 @@ export default {
     },
     getGridHeight: function () {
       debug('getGridHeight', height(document.getElementById(this.id)))
-      return height(document.getElementById(this.id)) + 700
+      // return height(document.getElementById(this.id)) + 700
+      return height(document.getElementById(this.id))
     },
 
     resolveComponent: function (component) {
@@ -554,9 +555,7 @@ export default {
       debug('onBreakpointChange', breakpoint)
       // this.breakpoint = breakpoint
       let grid = this.viewGrid
-      grid.breakpoint = breakpoint/* .vue-grid-placeholder {
-  background: #ddd; border: 2px dashed #aaa;
-} */
+      grid.breakpoint = breakpoint
       this.viewGrid = grid
     },
 
