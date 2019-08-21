@@ -76,28 +76,34 @@ export default {
   },
   computed: {
     normalized_data: function () {
-      let _val = { labels: [], datasets: [] }
-      if (this.data && this.data.labels.length >= this.max) {
-        for (let i = this.max - 1; i >= 0; i--) {
-          _val.labels[i] = this.data.labels[i]
-        }
-        _val.labels = _val.labels.clean()
+      let _val = JSON.parse(JSON.stringify(this.data))
 
-        Array.each(this.data.datasets, function (dataset, index) {
-          _val.datasets[index] = Object.clone(dataset)
-          _val.datasets[index].values = []
-          for (let i = this.max - 1; i >= 0; i--) {
-            _val.datasets[index].values[i] = dataset.values[i]
-          }
+      if (_val && _val.labels.length > this.max) {
+        _val.labels = _val.labels.slice(Math.max(_val.labels.length - this.max, 1))
 
-          _val.datasets[index].values = _val.datasets[index].values.clean()
+        // for (let i = this.max - 1; i >= 0; i--) {
+        //   _val.labels[i] = this.data.labels[i]
+        // }
+        // _val.labels = _val.labels.clean()
+
+        Array.each(_val.datasets, function (dataset, index) {
+          if (dataset.values.length > this.max) { dataset.values = dataset.values.slice(Math.max(dataset.values.length - this.max, 1)) }
+
+          // _val.datasets[index] = Object.clone(dataset)
+          // _val.datasets[index].values = []
+          // for (let i = this.max - 1; i >= 0; i--) {
+          //   _val.datasets[index].values[i] = dataset.values[i]
+          // }
+          //
+          // _val.datasets[index].values = _val.datasets[index].values.clean()
         }.bind(this))
-      } else {
-        _val = this.data
       }
+      // else {
+      //   _val = this.data
+      // }
 
-      debug('normalized_data', JSON.parse(JSON.stringify(_val)))
-      return JSON.parse(JSON.stringify(_val))
+      debug('normalized_data', _val)
+      return _val
     }
   },
   data () {

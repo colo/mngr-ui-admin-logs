@@ -132,9 +132,9 @@ export default {
           datasets: []
         }
       },
-      // events: {
-      //   updated: 'function(data){ this.current.data = data }'
-      // },
+      events: {
+        updated: 'proxyEvent'
+      },
       // someProperty: true,
       // updated: function (data) {
       //   debug('UPDATED EVENT', data)
@@ -178,20 +178,28 @@ export default {
               },
               callback: function (table, metadata, key, vm) {
                 if (table) {
-                  let label = moment(metadata.timestamp).format('DD/MM/YYYY, ha mm:ss') + '-' + moment(metadata.timestamp).format('mm:ss')
+                  vm.$once('chart.' + metadata.from + ':updated', function (data) {
+                    debug('chart.' + metadata.from + ':updated %o', data)
+                    this.current.data = data
+                  }.bind(this))
+
+                  let label = moment(metadata.timestamp).format('DD/MM/YYYY, h:mm:ss a')
 
                   if (!this.current.data.labels.contains(label)) { this.current.data.labels.push(label) }
 
                   let index_of_value = this.current.data.labels.indexOf(label)
 
-                  debug('MyChart TABLE ', table, key)
+                  debug('MyChart TABLE ', table, metadata, key)
 
                   Array.each(table, function (data) {
                     Array.each(data, function (val) {
                       debug('MyChart cb ', val, metadata, label, index_of_value, table)
 
                       let name = val.path
-                      // if (name.indexOf(table) > -1) { name = name.substring(name.indexOf(table + '.') + 1) }
+                      if (name.indexOf(metadata.from) > -1) {
+                        name = name.substring(name.indexOf(metadata.from + '.') + metadata.from.length + 1)
+                        name = (name === '') ? metadata.from : name
+                      }
 
                       let dataset = { name: name, chartType: 'bar', values: [], _key: val.path }
                       for (let index = 0; index < this.current.data.datasets.length; index++) {
@@ -204,7 +212,7 @@ export default {
                       // dataset.values.push(val)
                       dataset.values[index_of_value] = val.count * 1
 
-                      if (dataset.values.length > this.current.max_data) { dataset.values = dataset.values.slice(Math.max(dataset.values.length - this.current.max_data, 1)) }
+                      // if (dataset.values.length > this.current.max_data) { dataset.values = dataset.values.slice(Math.max(dataset.values.length - this.current.max_data, 1)) }
 
                       let found = false
                       Array.each(this.current.data.datasets, function (_dataset, index) {
@@ -250,9 +258,9 @@ export default {
                   // if (match_length) {
                   // this.update(datasets)
 
-                  if (this.current.data.labels.length > this.current.max_data) {
-                    this.current.data.labels = this.current.data.labels.slice(Math.max(this.current.data.labels.length - this.current.max_data, 1))
-                  }
+                  // if (this.current.data.labels.length > this.current.max_data) {
+                  //   this.current.data.labels = this.current.data.labels.slice(Math.max(this.current.data.labels.length - this.current.max_data, 1))
+                  // }
 
                   let data = JSON.parse(JSON.stringify(this.current.data))
                   debug('MyChart cb UPDATING3', data)
@@ -628,6 +636,7 @@ export default {
   },
 
   methods: {
+
     // myStyle: function (offset) {
     //   // const size = `calc(100vh - ${offset}px)`
     //   const size = height(document.getElementById('root')) + 500

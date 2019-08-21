@@ -180,7 +180,8 @@ export default {
           // register handler in the dynamic component
           vnode.componentInstance.$on(event, (eventData) => {
             const targetEvent = allEvents[event]
-            vnode.context[targetEvent](eventData)
+            // if(Array.isArray(eventData))
+            vnode.context[targetEvent](eventData, event, vnode.componentInstance)
           })
         })
       },
@@ -351,7 +352,10 @@ export default {
     }
   },
   methods: {
-
+    proxyEvent: function (data, event, vnode) {
+      debug('proxyEvent %o ', arguments)
+      this.$emit(vnode.id + ':' + event, data)
+    },
     getGridHeight: function () {
       debug('getGridHeight', height(document.getElementById(this.id)))
       return height(document.getElementById(this.id)) + 700
