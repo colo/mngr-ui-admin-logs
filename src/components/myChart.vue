@@ -20,6 +20,7 @@ export default {
 
   chart: undefined,
   props: {
+    // EventBus: undefined,
     id: {
       type: [String],
       default: 'myFrappeChart'
@@ -63,39 +64,46 @@ export default {
         // this.update(val)
 
         // this.create_chart()
-        let _val = { labels: [], datasets: [] }
-        if (val && val.labels.length >= this.max) {
-          for (let i = this.max - 1; i >= 0; i--) {
-            _val.labels[i] = val.labels[i]
-          }
-          _val.labels = _val.labels.clean()
-
-          Array.each(val.datasets, function (dataset, index) {
-            _val.datasets[index] = Object.clone(dataset)
-            _val.datasets[index].values = []
-            for (let i = this.max - 1; i >= 0; i--) {
-              _val.datasets[index].values[i] = dataset.values[i]
-            }
-
-            _val.datasets[index].values = _val.datasets[index].values.clean()
-          }.bind(this))
-        } else {
-          _val = val
-        }
-
-        debug('watch data', JSON.parse(JSON.stringify(_val)))
 
         if (!this.$options.chart) { this.create_chart() }
 
-        if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(_val))) }
+        this.update()
+        // if (this.$options.chart) { this.$options.chart.update(JSON.parse(JSON.stringify(_val))) }
       },
       // inmediate: true,
       deep: true
     }
   },
+  computed: {
+    normalized_data: function () {
+      let _val = { labels: [], datasets: [] }
+      if (this.data && this.data.labels.length >= this.max) {
+        for (let i = this.max - 1; i >= 0; i--) {
+          _val.labels[i] = this.data.labels[i]
+        }
+        _val.labels = _val.labels.clean()
+
+        Array.each(this.data.datasets, function (dataset, index) {
+          _val.datasets[index] = Object.clone(dataset)
+          _val.datasets[index].values = []
+          for (let i = this.max - 1; i >= 0; i--) {
+            _val.datasets[index].values[i] = dataset.values[i]
+          }
+
+          _val.datasets[index].values = _val.datasets[index].values.clean()
+        }.bind(this))
+      } else {
+        _val = this.data
+      }
+
+      debug('normalized_data', JSON.parse(JSON.stringify(_val)))
+      return JSON.parse(JSON.stringify(_val))
+    }
+  },
   data () {
     return {
       // chart: undefined,
+      // normalized_data: {},
       options: {
         // data: {
         //   labels: ['12am-3am', '3am-6am', '6am-9am', '9am-12pm',
@@ -146,13 +154,17 @@ export default {
       if (document.getElementById(this.id) && this.data && this.data.labels.length > 0 && this.data.datasets.length > 0) {
         this.$options.chart = new Chart(
           document.getElementById(this.id), // containing div
-          Object.merge(Object.clone(this.options), { data: JSON.parse(JSON.stringify(this.data)) })
+          Object.merge(Object.clone(this.options), { data: JSON.parse(JSON.stringify(this.normalized_data)) })
         )
       }
+    },
+    update: function () {
+      if (this.$options.chart) {
+        this.$options.chart.update(this.normalized_data)
+        this.$emit('updated', this.normalized_data)
+        // if (this.EventBus) this.EventBus.$emit('updated', [this.id, this.normalized_data])
+      }
     }
-    // update: function (data) {
-    //   if (this.$options.chart) { this.$options.chart.update(data) }
-    // }
   }
 }
 

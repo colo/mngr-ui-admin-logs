@@ -309,6 +309,7 @@ export default {
           },
           current: {
             // range: [0, 0],
+            max_data: 5,
             keys: {},
             data: {
               labels: [],
@@ -462,6 +463,8 @@ export default {
                     // dataset.values.push(val)
                     dataset.values[index_of_value] = val * 1
 
+                    if (dataset.values.length > this.current.max_data) { dataset.values = dataset.values.slice(Math.max(dataset.values.length - this.current.max_data, 1)) }
+
                     let found = false
                     // Array.each(this.current.data.datasets, function (_dataset, index) {
                     for (let index = 0; index < this.current.data.datasets.length; index++) {
@@ -503,9 +506,15 @@ export default {
 
                       if (match_length) {
                         // this.update(datasets)
+
+                        if (this.current.data.labels.length > this.current.max_data) {
+                          this.current.data.labels = this.current.data.labels.slice(Math.max(this.current.data.labels.length - this.current.max_data, 1))
+                        }
+
                         let data = JSON.parse(JSON.stringify(this.current.data))
                         debug('MyChart cb UPDATING2', data)
                         this.props.data = data
+
                         // Vue.$set(this.props, 'data', data)
                         // Object.each(data, function (value, key) {
                         //   debug('MyChart cb UPDATING3', value, key)
